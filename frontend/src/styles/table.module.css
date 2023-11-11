@@ -1,0 +1,45 @@
+/* :global(.table) {
+  width: auto;
+} */
+
+/* td,
+thead {
+  width: auto;
+  text-align: center;
+  vertical-align: middle;
+  font-size: medium;
+  line-height: normal;
+} */
+
+/* thead {
+  color: #ffffff;
+  font-size: medium;
+} */
+
+/* pokemon icon in table */
+.pokemonIcon {
+  float: left;
+  width: 75px;
+}
+
+/* pokemon name in table */
+.pokemonName {
+  width: 100%;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.gameVersion {
+  font-weight: 666;
+  -webkit-text-stroke: .5px black;
+}
+
+.linkButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  display: inline;
+  margin: 0;
+  padding: 0;
+}

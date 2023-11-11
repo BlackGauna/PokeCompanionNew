@@ -1,0 +1,159 @@
+body {
+  --padding: 0em 0.4em 0.2em 0.4em;
+  --radius: 1em;
+}
+
+.typeText {
+  padding: 0px !important;
+  margin-right: 0.2rem;
+}
+
+.type {
+  margin-right: 0.1rem;
+  text-shadow: 1px 1px 1px black;
+}
+
+.normal {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #a8a878 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.fighting {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #c03028 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.flying {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #a890f0 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.poison {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #a040a0 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.ground {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #e0c068 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.rock {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #b8a038 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.bug {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #a8b820 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.ghost {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #705898 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+
+}
+
+.steel {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #b8b8d0 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.fire {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #f08030 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.water {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #6890f0 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.grass {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #78c850 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.electric {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #f8d030 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.psychic {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #f85888 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.ice {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #98d8d8 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.dragon {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #7038f8 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.dark {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #705848 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}
+
+.fairy {
+  border: 1px transparent;
+  border-radius: var(--radius);
+  background-color: #f85888 !important;
+  color: whitesmoke;
+  padding: var(--padding) !important;
+}

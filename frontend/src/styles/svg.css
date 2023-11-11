@@ -1,0 +1,18 @@
+/* styles for hover effect of svg imagemap */
+rect {
+  opacity: 0;
+}
+
+rect:hover {
+  fill: white !important;
+  opacity: 0.8 !important;
+}
+
+path:hover {
+  fill: white !important;
+  opacity: 0.8 !important;
+}
+
+path {
+  opacity: 0;
+}

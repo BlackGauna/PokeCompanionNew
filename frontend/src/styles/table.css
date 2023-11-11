@@ -1,0 +1,43 @@
+td,
+thead {
+  width: auto;
+  text-align: center;
+  vertical-align: middle;
+  font-size: medium;
+  line-height: 1em;
+}
+
+thead {
+  color: #ffffff;
+  font-size: medium;
+}
+
+.table {
+  width: auto;
+  margin: auto 1rem;
+}
+
+/* pokemon icon in table */
+.pokemonIcon {
+  float: left;
+  width: 2.5rem;
+}
+
+/* pokemon name in table */
+.pokemonName {
+  width: 100%;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.gameVersion {
+  font-weight: 666;
+  -webkit-text-stroke: .5px black;
+}
+
+.dex {
+  margin: 0.5rem;
+  font-size: large;
+  font-weight: 600;
+  text-align: left;
+}

@@ -1,0 +1,25 @@
+/* .App{
+  background-color: #b8e8d0;
+} */
+body {
+  background-color: #212529;
+}
+
+.modal-content {
+  background-color: #262626;
+  color: aliceblue;
+}
+
+div {
+  color: whitesmoke;
+}
+
+.linkButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  display: inline;
+  margin: 0;
+  padding: 0;
+}

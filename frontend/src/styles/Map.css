@@ -1,0 +1,8 @@
+.MapContainer {
+  text-align: center;
+}
+
+.Map {
+  height: 80vh;
+  min-height: 600px;
+}

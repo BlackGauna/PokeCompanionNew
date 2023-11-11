@@ -113,6 +113,7 @@ const trimPokemonData = async (pokemonData, speciesData) => {
   // set ordinary info
   pokemon.name = pokemonData.name
   pokemon.id = pokemonData.id
+  pokemon.sprite = pokemonData.sprites.front_default
 
   // trim abilities
   let abilities = []

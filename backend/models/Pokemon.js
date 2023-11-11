@@ -10,6 +10,7 @@ const PokemonSchema = new Schema({
   name: String,
   id: { type: Number, index: true, unique: true },
   names: SchemaTypes.Mixed,
+  sprite: String,
   abilities: [AbilitySchema],
   held_items: [{
     _id: false,

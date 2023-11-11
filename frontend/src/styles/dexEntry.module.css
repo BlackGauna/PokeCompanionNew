@@ -1,0 +1,67 @@
+/* :global(table) {
+  border-color: transparent;
+  width: 100%;
+} */
+
+:global(.modal-dialog) {
+  width: 70%;
+  max-width: 800px;
+  min-width: 680px;
+  overflow-x: scroll;
+}
+
+:global(.modal) {
+  overflow-x: scroll;
+}
+
+.info {
+  font-size: large;
+  font-weight: 600;
+  text-align: left;
+}
+
+.dexTable {
+  border-color: transparent;
+  table-layout: fixed;
+  min-width: 630px;
+  max-width: 750px;
+  width: fit-content;
+}
+
+.icon {
+  width: 120px;
+  padding: 0.5rem;
+  margin: 3rem;
+}
+
+.generalInfo {
+  border: 1px solid;
+  border-color: grey;
+}
+
+.attackTableContainer {
+  float: left;
+  width: fit-content;
+}
+
+.statsTable {
+  border-color: transparent;
+  text-align: left;
+  table-layout: fixed;
+  width: 100%;
+  line-height: 0rem;
+  margin-bottom: 0rem;
+}
+
+.statName {
+  /* float: left; */
+  width: 4.5rem;
+}
+
+.statsBar {
+  border-radius: 1rem;
+  float: left;
+  height: 8px;
+  /* padding-top: 1rem !important; */
+  /* vertical-align: bottom; */
+}
