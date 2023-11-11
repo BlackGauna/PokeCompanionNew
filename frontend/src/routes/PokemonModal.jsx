@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
 import { Table as RTable, Modal, Container, Button } from 'react-bootstrap'
-import Table from "./Table.jsx";
+import Table from "../components/Table.jsx";
 
 // import tableStyle from '../styles/table.module.css'
 import '../styles/types.css'

@@ -4,12 +4,18 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 // import App from './App.jsx'
 import PokeList from './routes/PokeList.jsx'
+import AppNavBar from './routes/AppNavBar.jsx'
 
 import './index.css'
 
 const router = createBrowserRouter([
   {
-    path: "/", element: <PokeList/>,
+    path: "/", element: <AppNavBar/>,
+    children: [
+      {
+        path: "/", element:<PokeList/>
+      }
+    ]
   }
 ])
 

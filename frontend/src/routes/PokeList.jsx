@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react'
 import { Button, Container } from 'react-bootstrap'
-import Table from "./Table"
+import Table from "../components/Table.jsx"
 import axios from '../api.jsx'
 import DexEntryModal from './PokemonModal.jsx'
 
