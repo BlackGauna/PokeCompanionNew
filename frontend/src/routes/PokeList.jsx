@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Button, Container } from 'react-bootstrap'
 import Table from "../components/Table.jsx"
 import axios from '../api.jsx'
@@ -31,16 +31,29 @@ function PokeList() {
   const [levelUpMoves, setLevelUpMoves] = useState([])
   const [machineMoves, setMachineMoves] = useState([])
 
-  useEffect(() => {
-    // get pokemon info
-    axios.get('/api/pokemon/13')
-      .then((res) => {
-        setPokemon(res.data)
-        setLoading(false) // set loading mode to false after getting data
 
-      })
-      .catch(err => { console.log(err); })
-  }, [])
+  const hasBeenCalled = useRef(true)
+  useEffect(() => {
+    if (hasBeenCalled.current) {
+      // get pokemon info
+      axios.get('/api/pokemon/43')
+        .then((res) => {
+          setPokemon(res.data)
+          setLoading(false) // set loading mode to false after getting data
+
+        })
+        .catch(err => { console.log(err) })
+
+    } else {
+      console.log(`axios.get has already been called!!!`)
+    }
+  }, [hasBeenCalled])
+
+  useEffect(() => {
+    return () => {
+      hasBeenCalled.current = false
+    }
+  })
 
   // prepare pokemon table data
   useEffect(() => {
@@ -69,7 +82,7 @@ function PokeList() {
       setLevelUpMoves(pokemon.moves.level_up)
       setMachineMoves(pokemon.moves.machine)
 
-      console.log(pokemon);
+      console.log(pokemon)
       setTableData([tableElement])
     }
   }, [pokemon])
@@ -99,7 +112,7 @@ function PokeList() {
   function MyButton({ click, }) {
 
     const handleOnClick = (() => {
-      console.log(click);
+      console.log(click)
     })
     return (
       (<Button className='linkButton' onClick={handleOnClick}>Test</Button>)

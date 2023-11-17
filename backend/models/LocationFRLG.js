@@ -49,7 +49,7 @@ const LocationSchema = new Schema({
   toObject: { virtuals: true }
 })
 
-// virtual Population to get pokemon info from Pokemon collection
+// virtual Population to get pokemon info from Pokemon collection when getting location
 LocationSchema.virtual('pokemonEncounters.species', {
   ref: 'Pokemon',
   localField: 'pokemonEncounters.pokemon',

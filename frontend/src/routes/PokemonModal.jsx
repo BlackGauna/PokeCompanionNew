@@ -199,112 +199,123 @@ const DexEntryModal = (props) => {
                 </td>
                 <td>
                   <RTable style={{ marginBottom: "0rem" }}>
-                    <tr>
-                      {/* pokemon number and name */}
-                      <div className={dexStyle.info}>
-                        #{pokemonData.id} {pokemonData.names.en}
-                      </div>
-                    </tr>
-                    <tr>
-                      {/* pokemon types */}
-                      <div className={dexStyle.info}>
-                        {buildPokemonTypesElement(pokemonData.types)}
-                      </div>
-                    </tr>
-                    <tr>
-                      {/* pokemon stats */}
-                      <div className={dexStyle.info}>
-                        Stats:
-                      </div>
-                      <RTable className={dexStyle.statsTable}>
-                        <tr>
-                          <td className={dexStyle.statName}><div>HP</div></td>
-                          <td>
-                            <div style={{ float: 'left', width: "100%" }}>
-                              <div className={dexStyle.statsBar} style={{ backgroundColor: "red", width: calcStatBarLength(pokemonData.stats[0].base_stat) + "%" }}></div>
-                              <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[0].base_stat}</div>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className={dexStyle.statName}><div>Attack</div></td>
-                          <td>
-                            <div style={{ float: 'left', width: "100%" }}>
-                              <div className={dexStyle.statsBar} style={{ backgroundColor: "orange", width: calcStatBarLength(pokemonData.stats[1].base_stat) + "%" }}></div>
-                              <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[1].base_stat}</div>
-                            </div>
+                    <tbody>
+                      <tr>
+                        <td>
+                          {/* pokemon number and name */}
+                          <div className={dexStyle.info}>
+                            #{pokemonData.id} {pokemonData.names.en}
+                          </div></td>
+                      </tr>
+                      <tr>
+                        <td>
+                          {/* pokemon types */}
+                          <div className={dexStyle.info}>
+                            {buildPokemonTypesElement(pokemonData.types)}
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          {/* pokemon stats */}
+                          <div className={dexStyle.info}>
+                            Stats:
+                          </div>
+                          <RTable className={dexStyle.statsTable}>
+                            <tbody>
+                              <tr>
+                                <td className={dexStyle.statName}><div>HP</div></td>
+                                <td>
+                                  <div style={{ float: 'left', width: "100%" }}>
+                                    <div className={dexStyle.statsBar} style={{ backgroundColor: "red", width: calcStatBarLength(pokemonData.stats[0].base_stat) + "%" }}></div>
+                                    <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[0].base_stat}</div>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className={dexStyle.statName}><div>Attack</div></td>
+                                <td>
+                                  <div style={{ float: 'left', width: "100%" }}>
+                                    <div className={dexStyle.statsBar} style={{ backgroundColor: "orange", width: calcStatBarLength(pokemonData.stats[1].base_stat) + "%" }}></div>
+                                    <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[1].base_stat}</div>
+                                  </div>
 
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className={dexStyle.statName}><div>Defense</div></td>
-                          <td>
-                            <div style={{ float: 'left', width: "100%" }}>
-                              <div className={dexStyle.statsBar} style={{ backgroundColor: "gold", width: calcStatBarLength(pokemonData.stats[2].base_stat) + "%" }}></div>
-                              <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[2].base_stat}</div>
-                            </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className={dexStyle.statName}><div>Defense</div></td>
+                                <td>
+                                  <div style={{ float: 'left', width: "100%" }}>
+                                    <div className={dexStyle.statsBar} style={{ backgroundColor: "gold", width: calcStatBarLength(pokemonData.stats[2].base_stat) + "%" }}></div>
+                                    <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[2].base_stat}</div>
+                                  </div>
 
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className={dexStyle.statName}><div>Sp. Atk.</div></td>
-                          <td>
-                            <div style={{ float: 'left', width: "100%" }}>
-                              <div className={dexStyle.statsBar} style={{ backgroundColor: "skyblue", width: calcStatBarLength(pokemonData.stats[3].base_stat) + "%" }}></div>
-                              <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[3].base_stat}</div>
-                            </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className={dexStyle.statName}><div>Sp. Atk.</div></td>
+                                <td>
+                                  <div style={{ float: 'left', width: "100%" }}>
+                                    <div className={dexStyle.statsBar} style={{ backgroundColor: "skyblue", width: calcStatBarLength(pokemonData.stats[3].base_stat) + "%" }}></div>
+                                    <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[3].base_stat}</div>
+                                  </div>
 
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className={dexStyle.statName}><div>Sp. Def.</div></td>
-                          <td>
-                            <div style={{ float: 'left', width: "100%" }}>
-                              <div className={dexStyle.statsBar} style={{ backgroundColor: "darkviolet", width: calcStatBarLength(pokemonData.stats[4].base_stat) + "%" }}></div>
-                              <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[4].base_stat}</div>
-                            </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className={dexStyle.statName}><div>Sp. Def.</div></td>
+                                <td>
+                                  <div style={{ float: 'left', width: "100%" }}>
+                                    <div className={dexStyle.statsBar} style={{ backgroundColor: "darkviolet", width: calcStatBarLength(pokemonData.stats[4].base_stat) + "%" }}></div>
+                                    <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[4].base_stat}</div>
+                                  </div>
 
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className={dexStyle.statName}><div>Speed</div></td>
-                          <td>
-                            <div style={{ float: 'left', width: "100%" }}>
-                              <div className={dexStyle.statsBar} style={{ backgroundColor: "green", width: calcStatBarLength(pokemonData.stats[5].base_stat) + "%" }}></div>
-                              <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[5].base_stat}</div>
-                            </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className={dexStyle.statName}><div>Speed</div></td>
+                                <td>
+                                  <div style={{ float: 'left', width: "100%" }}>
+                                    <div className={dexStyle.statsBar} style={{ backgroundColor: "green", width: calcStatBarLength(pokemonData.stats[5].base_stat) + "%" }}></div>
+                                    <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[5].base_stat}</div>
+                                  </div>
 
-                          </td>
-                        </tr>
-                      </RTable>
-                    </tr>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </RTable>
+                        </td>
+                      </tr>
+                    </tbody>
                   </RTable>
                 </td>
               </tr>
             </tbody>
           </RTable>
           <RTable>
-            <tr>
-              {/* pokemon's moves divided in level up and machine tables */}
-              <td style={{ verticalAlign: "top", width: "50%" }}>
-                <Container className={dexStyle.attackTableContainer}>
-                  <h6>Attacks by level-up:</h6>
-                  <Style>
-                    <Table columns={levelUpTable} data={pokemonData.moves.level_up} />
-                  </Style>
-                </Container>
-              </td>
-              <td style={{ verticalAlign: "top", width: "50%" }}>
-                <Container className={dexStyle.attackTableContainer}>
-                  <h6>Attacks by HM/TM:</h6>
-                  <Style>
-                    <Table columns={machineTable} data={pokemonData.moves.machine} />
-                  </Style>
-                </Container>
+            <tbody>
+              <tr>
+                {/* pokemon's moves divided in level up and machine tables */}
+                <td style={{ verticalAlign: "top", width: "50%" }}>
+                  <Container className={dexStyle.attackTableContainer}>
+                    <h6>Attacks by level-up:</h6>
+                    <Style>
+                      <Table columns={levelUpTable} data={pokemonData.moves.level_up} />
+                    </Style>
+                  </Container>
+                </td>
+                <td style={{ verticalAlign: "top", width: "50%" }}>
+                  <Container className={dexStyle.attackTableContainer}>
+                    <h6>Attacks by HM/TM:</h6>
+                    <Style>
+                      <Table columns={machineTable} data={pokemonData.moves.machine} />
+                    </Style>
+                  </Container>
 
-              </td>
+                </td>
 
-            </tr>
+              </tr>
+            </tbody>
           </RTable>
         </Container >
 

@@ -82,6 +82,7 @@ const getNewLocation = (id, parentRes) => {
 
             // send location data as JSON to mongoDB
             // areasGot[0] because result is an array for possible multiple areas in one location
+            // TODO: change for locations with multiple areas, eg. caves
             var locationDB = new Location(areasGot[0])
             locationDB.save().then((location) => {
               location.populate('pokemonEncounters.species').then((final) => {
@@ -99,7 +100,7 @@ const getAreaEncounters = (area) => {
 
   // store results for each area in
   let encounters = []
-  // array of all promises that is used to wait for them finishing at the end
+  // array of all promises that are used to wait for them finishing at the end
   var promises = []
 
   let areaData = {}

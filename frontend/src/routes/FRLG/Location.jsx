@@ -86,6 +86,7 @@ function FRLGLocation() {
   useEffect(() => {
 
     // setup AbortController to cancel an axios call, e.g. when called twice by react strict mode
+    // but react strict mode is still at least beginning call
     const abortController = new AbortController()
     const abortSignal = abortController.signal
 
@@ -108,7 +109,7 @@ function FRLGLocation() {
         .catch(err => {
           // Check if the error is due to an aborted request
           if (abortController.signal.aborted) {
-            console.log('Request aborted:', err.message)
+            console.log('Request aborted, likely because of React Strict Mode:', err.message)
           } else {
 
             console.log(err)
@@ -158,8 +159,6 @@ function FRLGLocation() {
 
   const setupTableElements = (encountersArray, species) => {
     encountersArray.forEach(detail => {
-
-
 
       let methodName = getNameinLang(detail.method.names, "en", detail.method.name)
 

@@ -4,7 +4,7 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-import pokemon from './routes/pokemon.route.js'
+import pokemon from './routes/pokemon2.route.js'
 import Location from './routes/location.route.js'
 
 const app = express()
