@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
 import { Table as RTable, Modal, Container, Button } from 'react-bootstrap'
-import Table from "../components/Table.jsx";
+import Table from "../components/Table.jsx"
+import { isEmpty } from '../utils/Object.js'
+
 
 // import tableStyle from '../styles/table.module.css'
 import '../styles/types.css'
@@ -81,15 +83,21 @@ const DexEntryModal = (props) => {
   const [isLoading, setLoading] = useState(true)
 
   useEffect(() => {
-    console.log("drawing modal");
-    setPokemonData(props.pokemonData)
-    setLoading(false)
+    // check if props not empty
+    if (!isEmpty(props.pokemonData)) {
+      console.log("drawing modal")
+      setPokemonData(props.pokemonData)
+      setLoading(false)
+    }
+
+
   }, [props.pokemonData])
 
   useEffect(() => {
-    console.log("pokemonData");
-
-    console.log(props.pokemonData);
+    if (!isEmpty(pokemonData)) {
+      console.log("pokemonData")
+      console.log(props.pokemonData)
+    }
   }, [pokemonData])
 
   // columns for level-up moves in modal

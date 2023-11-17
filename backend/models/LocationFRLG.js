@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
-const Pokemon = require('./Pokemon');
+import { Schema, SchemaTypes, model } from 'mongoose'
+// const Pokemon = require('./Pokemon')
 
 // old
-const details = new mongoose.Schema({
+const details = new Schema({
   chance: Number,
-  condition_values: mongoose.SchemaTypes.Mixed,
+  condition_values: SchemaTypes.Mixed,
   min_level: Number,
   max_level: Number,
   method: {
@@ -13,10 +13,10 @@ const details = new mongoose.Schema({
   versions: [String]
 }, { _id: false })
 
-const encounter_details = new mongoose.Schema({
+const encounter_details = new Schema({
   // encounter_details: [details],
   chance: Number,
-  condition_values: mongoose.SchemaTypes.Mixed,
+  condition_values: SchemaTypes.Mixed,
   min_level: Number,
   max_level: Number,
   method: {
@@ -25,13 +25,13 @@ const encounter_details = new mongoose.Schema({
   versions: [String] // versions[0] is for FR and versions[1] for LG
 }, { _id: false })
 
-const encounters = new mongoose.Schema({
+const encounters = new Schema({
   encounter_details: [encounter_details],
   max_chance: Number
 }, { _id: false })
 
-const pokemonEncounters = new mongoose.Schema({
-  encounters: { type: mongoose.SchemaTypes.Mixed },
+const pokemonEncounters = new Schema({
+  encounters: { type: SchemaTypes.Mixed },
   pokemon: String,
 }, {
   _id: false,
@@ -40,8 +40,8 @@ const pokemonEncounters = new mongoose.Schema({
 })
 
 
-const LocationSchema = new mongoose.Schema({
-  name: String,
+const LocationSchema = new Schema({
+  name: { type: String, unique: true },
   pokemonEncounters: [pokemonEncounters],
 
 }, {
@@ -58,4 +58,4 @@ LocationSchema.virtual('pokemonEncounters.species', {
 })
 
 
-module.exports = Location = mongoose.model('Location', LocationSchema, 'LocationsFRLG')
+export const Location = model('Location', LocationSchema, 'LocationsFRLG')

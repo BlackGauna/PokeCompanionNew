@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import { Mongoose } from 'mongoose'
 const router = Router()
 
 import Pokedex from 'pokedex-promise-v2'
@@ -28,17 +27,17 @@ router.get('/:id', (req, res) => {
 
 // get a pokemon from DB or call the API and save new entry
 const getPokemon = async (id) => {
-  console.log("start getting pokemon")
+  console.log("start getting pokemon with id " + id)
   return new Promise((resolve, reject) => {
     Pokemon.findOne({ id: id }).then((pokemon) => {
 
       // if response is not empty, i.e. DB entry found
       if (pokemon != null && pokemon.length != 0) {
-        console.log("Found in DB!")
+        console.log(id + " found in DB!")
         resolve(pokemon)
       } else {
         // pokemon was not in DB, get from API and write entry to DB
-        console.log("Pokemon not found in DB, getting from pokeAPI...")
+        console.log(id + " Pokemon not found in DB, getting from pokeAPI...")
         pokedex.getPokemonByName(id).then((pokemonData) => {
           pokedex.getPokemonSpeciesByName(pokemonData.name).then((speciesData) => {
 
@@ -55,17 +54,17 @@ const getPokemon = async (id) => {
   })
 }
 const getPokemonByName = async (name) => {
-  console.log("start getting pokemon")
+  console.log("start getting pokemon with name " + name)
   return new Promise((resolve, reject) => {
     Pokemon.findOne({ name: name }).then((pokemon) => {
 
       // if response is not empty, i.e. DB entry found
       if (pokemon != null && pokemon.length != 0) {
-        console.log("Found in DB!")
+        console.log(name + " found in DB!")
         resolve(pokemon)
       } else {
         // pokemon was not in DB, get from API and write entry to DB
-        console.log("Pokemon not found in DB, getting from pokeAPI...")
+        console.log(name + " not found in DB, getting from pokeAPI...")
         pokedex.getPokemonByName(name).then((pokemonData) => {
           pokedex.getPokemonSpeciesByName(pokemonData.name).then((speciesData) => {
 
@@ -360,3 +359,4 @@ router.get("/:id/:lang", (req, res) => {
 
 
 export default router
+export { getPokemonByName }

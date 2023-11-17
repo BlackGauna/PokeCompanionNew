@@ -48,4 +48,4 @@ const PokemonSchema = new Schema({
 
 })
 
-export const Pokemon = model('Pokemon', PokemonSchema)
+export const Pokemon = model('Pokemon', PokemonSchema, 'Pokemon')

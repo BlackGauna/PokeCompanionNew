@@ -1,0 +1,27 @@
+<svg version="1.1" viewBox="0 0 6528 6400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <g transform="translate(712.02 743.42)">
+  <image x="-711.3" y="-742.7" width="6528" height="6400" preserveAspectRatio="none" 
+  xlink:href="/images/FRLG/FRLGmap.gif"/>
+
+  <a href="/FRLG/map/kanto-route-1">
+    <rect id="route01" x="247.98" y="2776.6" width="385" height="640"/>
+  </a>
+  <a href="/FRLG/map/kanto-route-2">
+    <path id="route02" d="m632.98 2136.6h-385v-455h255v-445h-30v-135h-225v-315h385v295h-30v-180h-150v180h180z"/>
+  </a>
+  <a href="/FRLG/map/pallet-town">
+    <rect id="palletTown" x="247.98" y="3416.6" width="385" height="320"/>
+  </a>
+  <a href="/FRLG/map/viridian-city">
+    <rect id="viridianCity" x="167.97546" y="2137.6" width="657" height="639"/>
+  </a>
+  <a href="/FRLG/map/viridian-forest">
+    <path id="viridianForest" d="m247.98 1101.6h225v135h30v445l-255-1e-4z"/>
+  </a>
+  <a href="/FRLG/map/digletts-cave">
+    <rect id="diglettCave" x="457.98" y="941.58" width="140" height="125" ry="0" stroke-width="1.0819"/>
+  </a>
+  
+    
+ </g>
+</svg>

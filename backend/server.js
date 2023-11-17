@@ -5,6 +5,7 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 
 import pokemon from './routes/pokemon.route.js'
+import Location from './routes/location.route.js'
 
 const app = express()
 const PORT = process.env.PORT || 3500
@@ -14,6 +15,7 @@ app.use(cors())
 
 // routes
 app.use('/api/pokemon', pokemon)
+app.use('/api/location', Location)
 
 // connect to DB
 // get uri
