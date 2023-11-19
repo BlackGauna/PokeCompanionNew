@@ -294,6 +294,13 @@ const DexEntryModal = (props) => {
               </tr>
             </tbody>
           </RTable>
+
+          {/* Evolutions */}
+          <Container>
+            <h4>Evolutions:</h4>
+
+          </Container>
+          {/* Pokemon Moves */}
           <RTable className='gx-0'>
             <tbody className='gx-0'>
               <tr className='gx-0'>

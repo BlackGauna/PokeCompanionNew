@@ -149,36 +149,6 @@ const getNewPokemonByName = async (name) => {
   }
 }
 
-// old method
-// const getNewPokemonByName = async (name) => {
-//   console.log("start getting pokemon with name " + name)
-//   return new Promise((resolve, reject) => {
-//     Pokemon.findOne({ name: name }).then((pokemon) => {
-
-//       // if response is not empty, i.e. DB entry found
-//       if (pokemon != null && pokemon.length != 0) {
-//         console.log(name + " found in DB!")
-//         resolve(pokemon)
-//       } else {
-//         // pokemon was not in DB, get from API and write entry to DB
-//         console.log(name + " not found in DB, getting from pokeAPI...")
-//         pokedex.getPokemonByName(name).then((pokemonData) => {
-//           pokedex.getPokemonSpeciesByName(pokemonData.name).then((speciesData) => {
-
-//             trimPokemonData(pokemonData, speciesData).then(res => {
-//               const newPokemon = new Pokemon(res)
-//               newPokemon.save().then(saved => {
-//                 resolve(saved)
-//               })
-//             })
-//           })
-//         })
-//       }
-//     })
-//   })
-// }
-
-
 // Returns a Promise that resolves after "ms" Milliseconds
 // TODO: need to rewrite if needed, because trimPokemonData function has changed to return promise without saving to DB
 const timer = ms => new Promise(res => setTimeout(res, ms))
@@ -298,14 +268,18 @@ const trimPokemonData = async (pokemonData, speciesData) => {
   pokemon.is_mythical = speciesData.is_mythical
   pokemon.hatch_counter = speciesData.hatch_counter
   pokemon.evolves_from = speciesData.evolves_from_species ? speciesData.evolves_from_species.name : null
+
   /* TODO: add evolves_to from evolution_chain API, with filtering for partially evolved pokemon
             and maybe also needed for evolves_from when second evolution or beyond to get previous evolution(s)*/
+
+  // test for todo above
+  let evolves_to = await getEvolutions(speciesData.evolution_chain.url)
 
   let names = trimNames(speciesData.names)
 
 
   const moves = await getMoves(rawMoves)
-  pokemon = { abilities, moves, held_items, names, stats, types, ...pokemon }
+  pokemon = { abilities, moves, held_items, names, stats, types, evolves_to, ...pokemon }
 
   // return pokemon
 
@@ -420,6 +394,74 @@ const getMovesRaw = (movesArray) => {
       }
     })
   })
+}
+
+// test implementation for getting evolutions of species
+// TODO: rethink structure of array/object, and filter to evolves_from and evolves_to when appropriate
+const getEvolutions = async (url) => {
+  try {
+    const evolutions = await pokedex.getResource(url)
+    return filterEvolutionChain(evolutions.chain)
+
+  } catch (error) {
+    console.log("Could not find evolution")
+    console.error(error)
+  }
+}
+
+const filterEvolutionChain = async (evolutionChain) => {
+  console.log("getting evolutions...")
+  const evolves_to = []
+  if (evolutionChain.evolves_to === null) {
+    return evolves_to
+  } else {
+
+    evolutionChain.evolves_to.forEach(evolution => {
+      const evolutionElement = recursiveEvoChain(evolution)
+      evolves_to.push(evolutionElement ? evolutionElement : null)
+    })
+  }
+
+  return evolves_to
+}
+
+
+const recursiveEvoChain = (chainElement) => {
+  console.log("getting new (sub-)evolution")
+  const evolves_to = []
+
+  const evolution = {}
+
+  evolution.name = chainElement.species.name
+  console.log(`Pokemon evolves to ${evolution.name}`)
+
+  // TODO: edit for multiple methods
+  const details = chainElement.evolution_details[0]
+
+  switch (details.trigger.name) {
+    case "use-item":
+      evolution.method = "use-item"
+      evolution.trigger = details.name
+      break
+
+    case "level-up":
+      evolution.method = "level-up"
+      evolution.trigger = details.min_level
+      break
+
+    default:
+      break
+  }
+
+  if (chainElement.evolves_to !== null) {
+    evolution.evolves_to = []
+    chainElement.evolves_to.forEach(subChainElement => {
+      const sub_evolves_to = recursiveEvoChain(subChainElement)
+      evolution.evolves_to.push(sub_evolves_to ? sub_evolves_to : null)
+    })
+  }
+
+  return evolution
 }
 
 // get pokemon with all names (pokemon, moves, types, etc.) filtered for one language

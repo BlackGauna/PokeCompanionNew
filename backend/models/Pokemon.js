@@ -42,7 +42,8 @@ const PokemonSchema = new Schema({
   is_baby: Boolean,
   is_legendary: Boolean,
   is_mythical: Boolean,
-  evolves_from: String
+  evolves_from: String,
+  evolves_to: SchemaTypes.Mixed,
 
 
 
