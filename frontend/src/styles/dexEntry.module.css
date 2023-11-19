@@ -42,6 +42,8 @@
 .attackTableContainer {
   float: left;
   width: fit-content;
+  --bs-gutter-x: 0
+    /* remove padding from added tbody and tr to table structure  */
 }
 
 .statsTable {

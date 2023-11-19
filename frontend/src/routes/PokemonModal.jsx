@@ -178,6 +178,8 @@ const DexEntryModal = (props) => {
   //   console.log(pokemonData);
   // }, [pokemonData])
 
+
+  // TODO: need to fix styling because of newly added tbody and td elements
   if (isLoading || Object.keys(pokemonData).length === 0) {
     return <div></div>
   }
@@ -292,12 +294,12 @@ const DexEntryModal = (props) => {
               </tr>
             </tbody>
           </RTable>
-          <RTable>
-            <tbody>
-              <tr>
+          <RTable className='gx-0'>
+            <tbody className='gx-0'>
+              <tr className='gx-0'>
                 {/* pokemon's moves divided in level up and machine tables */}
                 <td style={{ verticalAlign: "top", width: "50%" }}>
-                  <Container className={dexStyle.attackTableContainer}>
+                  <Container className={'gx-0 ' + dexStyle.attackTableContainer}>
                     <h6>Attacks by level-up:</h6>
                     <Style>
                       <Table columns={levelUpTable} data={pokemonData.moves.level_up} />
