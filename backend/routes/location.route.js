@@ -2,7 +2,7 @@ import { Location } from '../models/LocationFRLG.js'
 import { Router } from 'express'
 const router = Router()
 
-import pokemonRoute, { getPokemonByName } from './pokemon.route.js'
+import pokemonRoute, { getPokemonByName } from './pokemon2.route.js'
 
 import Pokedex from 'pokedex-promise-v2'
 const options = {
@@ -151,7 +151,7 @@ const getAreaEncounters = (area) => {
 
       combinePokemonEncounters(pokemon.encounters)
       if (pokemon.pokemon == "psyduck") {
-        console.log(JSON.stringify(pokemon.encounters))
+        console.log(JSON.stringify(pokemon))
       }
       pokemon.encounters = combineVersionEncounters(pokemon.encounters)
 
@@ -161,9 +161,11 @@ const getAreaEncounters = (area) => {
       // }
 
       // Get pokemon info and save into DB
-      promises.push(getPokemonByName(pokemon.pokemon).then(res => {
+      // promises.push(getPokemonByName + (pokemon.pokemon).then(res => {
 
-      }))
+      // }))
+
+      promises.push(getPokemonByName(pokemon.pokemon))
       // getMethodItem(areaData.areaEncounters[pokemon].encounters)
     })
 
@@ -290,7 +292,7 @@ const combineVersionEncounters = (encountersArray) => {
 
       // get method item names.
       // Convenient here because we are already iterating through all filtered encounters
-      getMethodItem(encDetail)
+      getMethodItemName(encDetail)
       newArray.push(encDetail)
     }
 
@@ -304,7 +306,7 @@ const combineVersionEncounters = (encountersArray) => {
 }
 
 // get names of encounter method, if it is an item encounter e.g. good rod
-const getMethodItem = async (encounterDetail) => {
+const getMethodItemName = async (encounterDetail) => {
 
   // wait until all promises resolve
   await new Promise(async () => {

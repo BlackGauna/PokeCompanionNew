@@ -24,9 +24,6 @@ router.get('/:id', (req, res) => {
     res.send(pokemon)
   })
 
-
-
-
 })
 
 // get a pokemon from DB or call the API and save new entry
@@ -54,89 +51,132 @@ const getPokemon = async (id) => {
     console.error(error)
 
   }
+}
+// wrapper to only call getNewPokemon once
+// but usefulness is not clear
+// was used to restrict double invocation by react strict mode, but did not help
+function getOnce(callback) {
+  const processedIds = new Set()
 
-  // wrapper to only call getNewPokemon once
-  // but usefulness is not clear
-  // was used to restrict double invocation by react strict mode, but did not help
-  function getOnce(callback) {
-    const processedIds = new Set()
+  const locks = new Map()
 
-    const locks = new Map()
+  return async function (id) {
+    if (!processedIds.has(id)) {
+      if (!locks.has(id)) {
+        locks.set(id, true)
+        processedIds.add(id)
 
-    return async function (id) {
-      if (!processedIds.has(id)) {
-        if (!locks.has(id)) {
-          locks.set(id, true)
-          processedIds.add(id)
+        try {
+          const newPokemon = await callback(id)
+          return newPokemon
 
-          try {
-            const newPokemon = await callback(id)
-            return newPokemon
-
-          } catch (error) {
-            console.error(error)
-          } finally {
-            locks.delete(id)
-          }
-        } else {
-          console.log(`Pokemon #${id} is already being processed.`)
+        } catch (error) {
+          console.error(error)
+        } finally {
+          locks.delete(id)
         }
-
-
       } else {
-        console.log(`Pokemon #${id} has already been processed!`)
+        console.log(`Pokemon #${id} is already being processed.`)
       }
-    }
-
-  }
 
 
-  async function getNewPokemon(id) {
-    try {
-      let searchPokemon = await pokedex.getPokemonByName(id)
-      let searchPokemonSpecies = await pokedex.getPokemonSpeciesByName(searchPokemon.name)
-
-      let newPokemon = await trimPokemonData(searchPokemon, searchPokemonSpecies)
-
-      let newPokemonDB = new Pokemon(newPokemon)
-
-      await newPokemonDB.save()
-
-      return newPokemonDB
-
-    } catch (error) {
-      console.error(error)
+    } else {
+      console.log(`Pokemon #${id} has already been processed!`)
     }
   }
 
 }
+
+
+async function getNewPokemon(id) {
+  try {
+    let searchPokemon = await pokedex.getPokemonByName(id)
+    let searchPokemonSpecies = await pokedex.getPokemonSpeciesByName(searchPokemon.name)
+
+    let newPokemon = await trimPokemonData(searchPokemon, searchPokemonSpecies)
+
+    let newPokemonDB = new Pokemon(newPokemon)
+
+    await newPokemonDB.save()
+
+    return newPokemonDB
+
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 const getPokemonByName = async (name) => {
   console.log("start getting pokemon with name " + name)
-  return new Promise((resolve, reject) => {
-    Pokemon.findOne({ name: name }).then((pokemon) => {
 
-      // if response is not empty, i.e. DB entry found
-      if (pokemon != null && pokemon.length != 0) {
-        console.log(name + " found in DB!")
-        resolve(pokemon)
-      } else {
-        // pokemon was not in DB, get from API and write entry to DB
-        console.log(name + " not found in DB, getting from pokeAPI...")
-        pokedex.getPokemonByName(name).then((pokemonData) => {
-          pokedex.getPokemonSpeciesByName(pokemonData.name).then((speciesData) => {
+  try {
+    const pokemon = await Pokemon.findOne({ name: name })
 
-            trimPokemonData(pokemonData, speciesData).then(res => {
-              const newPokemon = new Pokemon(res)
-              newPokemon.save().then(saved => {
-                resolve(saved)
-              })
-            })
-          })
-        })
-      }
-    })
-  })
+    if (pokemon != null) {
+      console.log(`Pokemon ${name}: ${pokemon.name} found in DB!`)
+      return pokemon
+    } else {
+      console.log(`Pokemon #${name} not found in DB, getting from pokeAPI...`)
+
+      const newPokemon = getOnce(getNewPokemonByName)
+
+      return await newPokemon(name)
+
+    }
+
+  } catch (error) {
+    console.error(error)
+  }
 }
+
+const getNewPokemonByName = async (name) => {
+  try {
+    console.log(`start getting pokemon with name ${name}from pokeAPI`)
+    let searchPokemon = await pokedex.getPokemonByName(name)
+    let searchPokemonSpecies = await pokedex.getPokemonSpeciesByName(searchPokemon.name)
+
+    let newPokemon = await trimPokemonData(searchPokemon, searchPokemonSpecies)
+
+    let newPokemonDB = new Pokemon(newPokemon)
+
+    await newPokemonDB.save()
+
+    return newPokemonDB
+
+  } catch (error) {
+    console.log(`Pokemon ${name} not found`)
+    console.error(error)
+  }
+}
+
+// old method
+// const getNewPokemonByName = async (name) => {
+//   console.log("start getting pokemon with name " + name)
+//   return new Promise((resolve, reject) => {
+//     Pokemon.findOne({ name: name }).then((pokemon) => {
+
+//       // if response is not empty, i.e. DB entry found
+//       if (pokemon != null && pokemon.length != 0) {
+//         console.log(name + " found in DB!")
+//         resolve(pokemon)
+//       } else {
+//         // pokemon was not in DB, get from API and write entry to DB
+//         console.log(name + " not found in DB, getting from pokeAPI...")
+//         pokedex.getPokemonByName(name).then((pokemonData) => {
+//           pokedex.getPokemonSpeciesByName(pokemonData.name).then((speciesData) => {
+
+//             trimPokemonData(pokemonData, speciesData).then(res => {
+//               const newPokemon = new Pokemon(res)
+//               newPokemon.save().then(saved => {
+//                 resolve(saved)
+//               })
+//             })
+//           })
+//         })
+//       }
+//     })
+//   })
+// }
 
 
 // Returns a Promise that resolves after "ms" Milliseconds
