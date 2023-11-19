@@ -13,6 +13,8 @@ const details = new Schema({
   versions: [String]
 }, { _id: false })
 
+
+// new
 const encounter_details = new Schema({
   // encounter_details: [details],
   chance: Number,

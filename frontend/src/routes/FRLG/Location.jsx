@@ -90,7 +90,6 @@ function FRLGLocation() {
     const abortController = new AbortController()
     const abortSignal = abortController.signal
 
-
     console.log("Loading data...")
 
     if (param.id === null) {
@@ -109,7 +108,7 @@ function FRLGLocation() {
         .catch(err => {
           // Check if the error is due to an aborted request
           if (abortController.signal.aborted) {
-            console.log('Request aborted, likely because of React Strict Mode:', err.message)
+            console.log('Multiple requests aborted, likely because of React Strict Mode:', err.message)
           } else {
 
             console.log(err)

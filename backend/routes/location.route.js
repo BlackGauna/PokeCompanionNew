@@ -307,13 +307,23 @@ const combineVersionEncounters = (encountersArray) => {
 const getMethodItem = async (encounterDetail) => {
 
   // wait until all promises resolve
-  await new Promise(() => {
+  await new Promise(async () => {
     // if method is an item, get item names array. Otherwise falls in catch block and ignore
-    pokedex.getItemByName(encounterDetail.method.name)
-      .then((item) => {
-        encounterDetail.method["names"] = item.names
-      })
-      .catch(() => { })
+    try {
+      const newItemMethod = await pokedex.getItemByName(encounterDetail.method.name)
+      encounterDetail.method["names"] = newItemMethod.names
+
+    } catch (error) {
+      console.log("item method not found, trying general method...")
+
+      try {
+        const newMethod = await pokedex.getResource(encounterDetail.method.url)
+        encounterDetail.method["names"] = newMethod.names
+      } catch (error) {
+        console.log("Method not found, maybe no entry in pokeAPI")
+      }
+    }
+
   })
 
 }

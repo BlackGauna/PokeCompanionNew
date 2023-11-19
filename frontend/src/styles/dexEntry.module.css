@@ -10,9 +10,9 @@
   overflow-x: auto;
 }
 
-:global(.modal) {
-  /* overflow-x: scroll; */
-}
+/* :global(.modal) {
+  overflow-x: scroll;
+} */
 
 .info {
   font-size: large;
