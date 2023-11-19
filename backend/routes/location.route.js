@@ -321,6 +321,17 @@ const getMethodItemName = async (encounterDetail) => {
       try {
         const newMethod = await pokedex.getResource(encounterDetail.method.url)
         encounterDetail.method["names"] = newMethod.names
+
+        // workaround for "walk" encounter
+        // TODO: find fix for walk encounter, so that it is tall grass or cave accordingly
+        //        maybe via map (routes -> tall grass, caves -> cave) or regex names
+        if (encounterDetail.method.name === "walk") {
+          encounterDetail.method.names.forEach(nameInLang => {
+            if (nameInLang.language.name === "en") {
+              nameInLang.name = "Tall Grass"
+            }
+          })
+        }
       } catch (error) {
         console.log("Method not found, maybe no entry in pokeAPI")
       }

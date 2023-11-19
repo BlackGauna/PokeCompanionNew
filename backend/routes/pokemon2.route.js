@@ -131,7 +131,7 @@ const getPokemonByName = async (name) => {
 
 const getNewPokemonByName = async (name) => {
   try {
-    console.log(`start getting pokemon with name ${name}from pokeAPI`)
+    console.log(`start getting pokemon with name ${name} from pokeAPI`)
     let searchPokemon = await pokedex.getPokemonByName(name)
     let searchPokemonSpecies = await pokedex.getPokemonSpeciesByName(searchPokemon.name)
 
