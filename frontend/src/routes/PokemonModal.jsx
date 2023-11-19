@@ -299,6 +299,7 @@ const DexEntryModal = (props) => {
               <tr className='gx-0'>
                 {/* pokemon's moves divided in level up and machine tables */}
                 <td style={{ verticalAlign: "top", width: "50%" }}>
+                  {/* gx-0 to  remove padding from added tbody and tr to table structure  */}
                   <Container className={'gx-0 ' + dexStyle.attackTableContainer}>
                     <h6>Attacks by level-up:</h6>
                     <Style>
@@ -307,7 +308,7 @@ const DexEntryModal = (props) => {
                   </Container>
                 </td>
                 <td style={{ verticalAlign: "top", width: "50%" }}>
-                  <Container className={dexStyle.attackTableContainer}>
+                  <Container className={'gx-0 ' + dexStyle.attackTableContainer}>
                     <h6>Attacks by HM/TM:</h6>
                     <Style>
                       <Table columns={machineTable} data={pokemonData.moves.machine} />

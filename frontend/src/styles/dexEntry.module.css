@@ -7,11 +7,11 @@
   width: 70%;
   max-width: 800px;
   min-width: 680px;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 :global(.modal) {
-  overflow-x: scroll;
+  /* overflow-x: scroll; */
 }
 
 .info {
@@ -42,8 +42,7 @@
 .attackTableContainer {
   float: left;
   width: fit-content;
-  --bs-gutter-x: 0
-    /* remove padding from added tbody and tr to table structure  */
+
 }
 
 .statsTable {
