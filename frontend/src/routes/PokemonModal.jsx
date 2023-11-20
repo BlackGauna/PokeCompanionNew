@@ -204,10 +204,11 @@ const DexEntryModal = (props) => {
     console.log("chain:")
     console.log(chain)
 
+    if (!chain || chain.length === 0) {
+      return null
+    }
 
-    let parallelEvolutions = (<table style={{ display: 'inline' }}>
-
-    </table>)
+    let evolutions = <></>
 
     for (const evolution of chain) {
       console.log("Getting many evolutions")
@@ -215,24 +216,39 @@ const DexEntryModal = (props) => {
         console.log(`Getting info of evolution ${evolution.name}`)
         const nextEvolution = (await axios.get(`/api/pokemon/${evolution.name}`)).data
 
-        const evolutionHTML = (
-          <>
-            {"-->"}
-            <img style={{ width: "4rem" }} src={nextEvolution.sprite} />
-
-            {await getEvolutionsRecursive(evolution.evolves_to)}
+        if (chain.length === 1) {
+          evolutions = <>
+            {evolutions.props.children}
+            <table>
+              <tbody>
+                <tr>
+                  <td>
+                    {"-->"}
+                    <img style={{ width: "4rem" }} src={nextEvolution.sprite} />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            {await getEvolutionsRecursive(evolution?.evolves_to)}
           </>
-        )
+        } else {
+          console.log("evolutions.props.children")
+          console.log(evolutions.props.children)
+          evolutions = (
+            <>
+              {evolutions.props.children}
+              <tr>
+                <td>
+                  {"-->"}
+                  <img style={{ width: "4rem" }} src={nextEvolution.sprite} />
 
-        parallelEvolutions = <table style={{ display: 'inline' }}>
-          {parallelEvolutions.props.children}
-          <tr>
-            <td>
-              {evolutionHTML}
-            </td>
-          </tr>
-        </table>
+                  {await getEvolutionsRecursive(evolution?.evolves_to)}
+                </td>
+              </tr>
+            </>
+          )
 
+        }
 
       } catch (error) {
         console.log("Error when trying to get evolution")
@@ -240,7 +256,17 @@ const DexEntryModal = (props) => {
         return null
       }
     }
-    return parallelEvolutions
+
+
+    if (chain.length === 1) {
+      return evolutions
+    } else {
+      return (
+        <table>
+          <tbody>{evolutions}</tbody>
+        </table>
+      )
+    }
 
   }
 
