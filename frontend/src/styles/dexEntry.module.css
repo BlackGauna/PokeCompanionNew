@@ -10,6 +10,17 @@
   overflow-x: auto;
 }
 
+
+.modalHeader {
+  background-color: #2a2b2c !important;
+  border-bottom: none !important;
+  border-color: #2a2b2c;
+}
+
+.modalContent {
+  background-color: #313435;
+}
+
 /* :global(.modal) {
   overflow-x: scroll;
 } */
@@ -26,6 +37,12 @@
   min-width: 630px;
   max-width: 750px;
   width: fit-content;
+  background-color: #2d2f30 !important;
+}
+
+td {
+  background-color: inherit !important;
+  color: oldlace !important;
 }
 
 .icon {
@@ -52,6 +69,7 @@
   width: 100%;
   line-height: 0rem;
   margin-bottom: 0rem !important;
+
 }
 
 .statName {

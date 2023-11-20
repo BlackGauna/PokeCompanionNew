@@ -4,15 +4,12 @@ import { Table as RTable, Modal, Container, Button } from 'react-bootstrap'
 import Table from "../components/Table.jsx"
 import { isEmpty } from '../utils/Object.js'
 
-
 // import tableStyle from '../styles/table.module.css'
 import '../styles/types.css'
 import dexStyle from '../styles/dexEntry.module.css'
 
 import styled from 'styled-components'
-import axios from '../api.jsx'
-
-
+import EvolutionChain from '../components/EvolutionChain.jsx'
 // setup style for react-table with style-components
 const Style = styled.div`
     
@@ -90,7 +87,7 @@ const DexEntryModal = (props) => {
     if (!isEmpty(props.pokemonData)) {
       console.log("drawing modal")
       setPokemonData(props.pokemonData)
-      buildEvolutions(props.pokemonData.evolution_chain)
+      // buildEvolutions(props.pokemonData.evolution_chain)
       setLoading(false)
     }
 
@@ -177,118 +174,18 @@ const DexEntryModal = (props) => {
     return types
   }
 
-
-  const buildEvolutions = async (evolutionChain) => {
-    let evolutionHTML = <></>
-    try {
-      console.log("getting evolution chain " + evolutionChain.name)
-      const baseEvo = (await axios.get(`/api/pokemon/${evolutionChain.name}`)).data
-      console.log("baseEvo:")
-      console.log(baseEvo)
-      evolutionHTML = (<Container style={{ display: "flex", alignItems: "center" }}>
-        <img style={{ width: "4rem" }} src={baseEvo.sprite} />
-        {await getEvolutionsRecursive(evolutionChain.evolves_to)}
-      </Container>)
-    } catch (error) {
-      console.log(`Error getting base evolution: ${evolutionChain.name}`)
-    }
-
-
-    console.log("finished")
-    console.log(evolutionHTML)
-
-    setEvolutions(evolutionHTML)
-  }
-
-  const getEvolutionsRecursive = async (chain) => {
-    console.log("chain:")
-    console.log(chain)
-
-    if (!chain || chain.length === 0) {
-      return null
-    }
-
-    let evolutions = <></>
-
-    for (const evolution of chain) {
-      console.log("Getting many evolutions")
-      try {
-        console.log(`Getting info of evolution ${evolution.name}`)
-        const nextEvolution = (await axios.get(`/api/pokemon/${evolution.name}`)).data
-
-        if (chain.length === 1) {
-          evolutions = <>
-            {evolutions.props.children}
-            <table>
-              <tbody>
-                <tr>
-                  <td>
-                    {"-->"}
-                    <img style={{ width: "4rem" }} src={nextEvolution.sprite} />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            {await getEvolutionsRecursive(evolution?.evolves_to)}
-          </>
-        } else {
-          console.log("evolutions.props.children")
-          console.log(evolutions.props.children)
-          evolutions = (
-            <>
-              {evolutions.props.children}
-              <tr>
-                <td>
-                  {"-->"}
-                  <img style={{ width: "4rem" }} src={nextEvolution.sprite} />
-
-                  {await getEvolutionsRecursive(evolution?.evolves_to)}
-                </td>
-              </tr>
-            </>
-          )
-
-        }
-
-      } catch (error) {
-        console.log("Error when trying to get evolution")
-        console.error(error)
-        return null
-      }
-    }
-
-
-    if (chain.length === 1) {
-      return evolutions
-    } else {
-      return (
-        <table>
-          <tbody>{evolutions}</tbody>
-        </table>
-      )
-    }
-
-  }
-
-  // const reloadData = useCallback(() => {
-  //   console.log("reloadData");
-  //   setPokemonData(props.pokemonData)
-  //   console.log(pokemonData);
-  // }, [pokemonData])
-
-
   if (isLoading || Object.keys(pokemonData).length === 0) {
     return <div></div>
   }
   return (
     <Modal show={props.show} onHide={props.toggleShow}>
-      <Modal.Header closeButton>
+      <Modal.Header className={dexStyle.modalHeader} closeButton>
         <Modal.Title>#{pokemonData.id} - {pokemonData.names.en} </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className={dexStyle.modalContent}>
 
         <Container >
-          <RTable className={dexStyle.dexTable} variant={"dark"}>
+          <RTable className={dexStyle.dexTable}>
             <tbody>
               {/* general info of pokemon at the top */}
               <tr role={"row"} className={dexStyle.generalInfo}>
@@ -308,7 +205,7 @@ const DexEntryModal = (props) => {
                       </tr>
 
                       <tr>
-                        <td>
+                        <td style={{ borderBottomWidth: "0px" }}>{/* remove ugly border */}
                           {/* pokemon stats */}
                           <div className={dexStyle.info}>
                             Stats:
@@ -388,7 +285,7 @@ const DexEntryModal = (props) => {
           {/* Evolutions */}
           <Container>
             <h4>Evolutions:</h4>
-            {evolutions}
+            <EvolutionChain pokemonData={pokemonData} />
           </Container>
           {/* Pokemon Moves */}
           <RTable className='gx-0'>
@@ -420,7 +317,7 @@ const DexEntryModal = (props) => {
         </Container >
 
       </Modal.Body >
-      <Modal.Footer>
+      <Modal.Footer className={dexStyle.modalHeader}>
         <Button variant='secondary' onClick={props.toggleShow}>Close</Button>
       </Modal.Footer>
     </Modal >

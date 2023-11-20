@@ -7,6 +7,7 @@ import PokeList from './routes/PokeList.jsx'
 import AppNavBar from './routes/AppNavBar.jsx'
 import FRLGMap from './routes/FRLG/Map.jsx'
 import FRLGLocation from './routes/FRLG/Location.jsx'
+import EvolutionChain from './components/EvolutionChain.jsx'
 
 import './index.css'
 
@@ -22,7 +23,10 @@ const router = createBrowserRouter([
       },
       {
         path: "/FRLG/map/:id", element: <FRLGLocation />
-      }
+      },
+      {
+        path: "/test", element: <EvolutionChain />
+      },
     ]
   }
 ])
