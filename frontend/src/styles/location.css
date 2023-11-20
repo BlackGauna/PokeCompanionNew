@@ -1,5 +1,5 @@
 .locationContainer {
-  border-style: ridge !important;
+  border-style: none !important;
   border-width: 2px !important;
   padding: 0.5em;
   background-color: #2a3035;

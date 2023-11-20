@@ -277,7 +277,6 @@ const DexEntryModal = (props) => {
   // }, [pokemonData])
 
 
-  // TODO: need to fix styling because of newly added tbody and td elements
   if (isLoading || Object.keys(pokemonData).length === 0) {
     return <div></div>
   }

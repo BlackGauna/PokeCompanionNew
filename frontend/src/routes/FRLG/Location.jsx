@@ -309,7 +309,7 @@ function FRLGLocation() {
     return (
       <Container className="locationContainer border" >
 
-        <RTable style={{ tableLayout: "fixed" }}>
+        <RTable style={{ tableLayout: "fixed", marginBottom: "0rem" }}>
           <tbody>
             <tr style={{ verticalAlign: "top" }}>
               <td style={{ width: "50%" }} >
