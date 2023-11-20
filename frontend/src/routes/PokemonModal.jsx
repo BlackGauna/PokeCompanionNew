@@ -288,7 +288,7 @@ const DexEntryModal = (props) => {
             <EvolutionChain pokemonData={pokemonData} />
           </Container>
           {/* Pokemon Moves */}
-          <RTable className='gx-0'>
+          <RTable className='gx-0 mb-0' borderless style={{ borderTop: "1rem" }}>
             <tbody className='gx-0'>
               <tr className='gx-0'>
                 {/* pokemon's moves divided in level up and machine tables */}

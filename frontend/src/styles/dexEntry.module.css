@@ -19,6 +19,7 @@
 
 .modalContent {
   background-color: #313435;
+  margin: 0rem !important;
 }
 
 /* :global(.modal) {
