@@ -91,7 +91,10 @@ const DexEntryModal = (props) => {
       setLoading(false)
     }
 
-
+    return () => {
+      setPokemonData({})
+      setLoading(true)
+    }
   }, [props.pokemonData])
 
   useEffect(() => {
@@ -172,6 +175,10 @@ const DexEntryModal = (props) => {
     })
 
     return types
+  }
+
+  const updatePokemonFromEvoChain = (pokemon) => {
+    setPokemonData(pokemon)
   }
 
   if (isLoading || Object.keys(pokemonData).length === 0) {
@@ -284,8 +291,10 @@ const DexEntryModal = (props) => {
 
           {/* Evolutions */}
           <Container>
-            <h4>Evolutions:</h4>
-            <EvolutionChain pokemonData={pokemonData} />
+            <span>Evolutions:</span>
+            {pokemonData.name.length > 1 &&
+              <EvolutionChain pokemonData={pokemonData} showNewPokemon={updatePokemonFromEvoChain} />
+            }
           </Container>
           {/* Pokemon Moves */}
           <RTable className='gx-0 mb-0' borderless style={{ borderTop: "1rem" }}>

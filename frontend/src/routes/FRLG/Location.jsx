@@ -36,7 +36,8 @@ const TableStyle = styled.div`
     max-width:200px;
   }
   `
-
+/* TODO: need to reimplement everything in here, because state is kinda fucked up.
+          Especially the useCallback inside PokemonButton seems fishy */
 function FRLGLocation() {
   const [imagePath, setImagePath] = useState('')
   const [areasData, setAreasData] = useState([])
@@ -50,12 +51,13 @@ function FRLGLocation() {
 
   // state variable and function to toggle modal
   const [showModal, setShowModal] = useState(false)
-  const toggleShowModal = () => {
+  const toggleShowModal = (data) => {
     setShowModal(!showModal)
+    setPokemonModal(data ? data : {})
     console.log("toggle")
   }
   useEffect(() => {
-    console.log(showModal)
+    console.log("showmodal: " + showModal)
   }, [showModal])
 
   useEffect(() => {
@@ -192,10 +194,9 @@ function FRLGLocation() {
       // } else {
       //   setPokemonModal(data)
 
-      setPokemonModal(data)
-      toggleShowModal()
+      toggleShowModal(data)
 
-    }, [pokemonModal, data])
+    }, [pokemonModal, data, setPokemonModal, toggleShowModal])
 
     return (
       <Button className='linkButton' onClick={onClick}>{data.names.en}</Button>
