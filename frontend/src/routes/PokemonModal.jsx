@@ -168,7 +168,8 @@ const DexEntryModal = (props) => {
 
   // Setup types prototype
   const buildPokemonTypesElement = (typesArray) => {
-    let types = <span className={"typeText"}>Type: </span>
+    // let types = <span className={"typeText"}>Type: </span>
+    let types = <span style={{ marginLeft: "0.5em" }}></span>
     typesArray?.forEach(type => {
       types = <>{types}<span className={"type " + type.name}>{type.name}</span></>
     })
@@ -277,17 +278,10 @@ const DexEntryModal = (props) => {
                         <td>
                           {/* pokemon number and name */}
                           <div className={dexStyle.info}>
-                            #{pokemonData.id} {pokemonData.names.en}
+                            #{pokemonData.id} - {pokemonData.names.en}{buildPokemonTypesElement(pokemonData.types)}
                           </div></td>
                       </tr>
-                      <tr>
-                        <td>
-                          {/* pokemon types */}
-                          <div className={dexStyle.info}>
-                            {buildPokemonTypesElement(pokemonData.types)}
-                          </div>
-                        </td>
-                      </tr>
+
                       <tr>
                         <td>
                           {/* pokemon stats */}
