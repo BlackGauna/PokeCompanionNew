@@ -46,12 +46,12 @@
 }
 
 .statsTable {
-  border-color: transparent;
+  border-color: transparent !important;
   text-align: left;
   table-layout: fixed;
   width: 100%;
   line-height: 0rem;
-  margin-bottom: 0rem;
+  margin-bottom: 0rem !important;
 }
 
 .statName {

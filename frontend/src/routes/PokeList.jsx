@@ -36,7 +36,7 @@ function PokeList() {
   useEffect(() => {
     if (hasBeenCalled.current) {
       // get pokemon info
-      axios.get('/api/pokemon/43')
+      axios.get('/api/pokemon/133')
         .then((res) => {
           setPokemon(res.data)
           setLoading(false) // set loading mode to false after getting data

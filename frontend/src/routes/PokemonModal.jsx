@@ -184,11 +184,10 @@ const DexEntryModal = (props) => {
       const baseEvo = (await axios.get(`/api/pokemon/${evolutionChain.name}`)).data
       console.log("baseEvo:")
       console.log(baseEvo)
-      evolutionHTML = (<div>
-        <img style={{ width: "4rem" }} src={baseEvo.sprite} /> {encodeURI("-->")}
-
+      evolutionHTML = (<Container style={{ display: "flex", alignItems: "center" }}>
+        <img style={{ width: "4rem" }} src={baseEvo.sprite} />
         {await getEvolutionsRecursive(evolutionChain.evolves_to)}
-      </div>)
+      </Container>)
     } catch (error) {
       console.log(`Error getting base evolution: ${evolutionChain.name}`)
     }
@@ -201,24 +200,47 @@ const DexEntryModal = (props) => {
   }
 
   const getEvolutionsRecursive = async (chain) => {
+    console.log("chain:")
+    console.log(chain)
+
+
+    let parallelEvolutions = (<table style={{ display: 'inline' }}>
+
+    </table>)
+
     for (const evolution of chain) {
+      console.log("Getting many evolutions")
       try {
-        console.log(`Trying to get info of evolution ${evolution.name}`)
+        console.log(`Getting info of evolution ${evolution.name}`)
         const nextEvolution = (await axios.get(`/api/pokemon/${evolution.name}`)).data
 
         const evolutionHTML = (
           <>
+            {"-->"}
             <img style={{ width: "4rem" }} src={nextEvolution.sprite} />
+
             {await getEvolutionsRecursive(evolution.evolves_to)}
           </>
         )
-        return evolutionHTML
+
+        parallelEvolutions = <table style={{ display: 'inline' }}>
+          {parallelEvolutions.props.children}
+          <tr>
+            <td>
+              {evolutionHTML}
+            </td>
+          </tr>
+        </table>
+
+
       } catch (error) {
         console.log("Error when trying to get evolution")
         console.error(error)
         return null
       }
     }
+    return parallelEvolutions
+
   }
 
   // const reloadData = useCallback(() => {
@@ -272,7 +294,7 @@ const DexEntryModal = (props) => {
                           <div className={dexStyle.info}>
                             Stats:
                           </div>
-                          <RTable className={dexStyle.statsTable}>
+                          <RTable className={dexStyle.statsTable + " borderless"}>
                             <tbody>
                               <tr>
                                 <td className={dexStyle.statName}><div>HP</div></td>
