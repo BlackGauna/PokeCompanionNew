@@ -32,8 +32,9 @@ const TableStyle = styled.div`
   }
 
   .pokemonCol {
-    min-width:120px;
+    min-width:160px;
     max-width:200px;
+    display:flex;
   }
   `
 /* TODO: need to reimplement everything in here, because state is kinda fucked up.
@@ -308,9 +309,9 @@ function FRLGLocation() {
     )
   } else {
     return (
-      <Container className="locationContainer border" >
+      <Container className="locationContainer borderless" >
 
-        <RTable style={{ tableLayout: "fixed", marginBottom: "0rem" }}>
+        <RTable borderless style={{ tableLayout: "fixed", marginBottom: "0rem" }}>
           <tbody>
             <tr style={{ verticalAlign: "top" }}>
               <td style={{ width: "50%" }} >

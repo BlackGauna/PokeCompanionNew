@@ -198,7 +198,7 @@ const DexEntryModal = (props) => {
               <tr role={"row"} className={dexStyle.generalInfo}>
                 <td variant="auto" role={'cell'} className={dexStyle.icon}>
                   {/* pokemon image */}
-                  <img style={{ width: "100%" }} src={pokemonData.sprite} />
+                  <img style={{ width: "100%" }} src={"/images/pokemon/" + pokemonData.id + ".png"} />
                 </td>
                 <td>
                   <RTable style={{ marginBottom: "0rem" }}>
