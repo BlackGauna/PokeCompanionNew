@@ -14,9 +14,9 @@ var pokedex = new Pokedex(options)
 
 // @route GET pokemon
 // @desc Get pokemon from DB or add to DB from pokeAPI
-router.get('/:id', (req, res) => {
+router.get('/:id(\\d+)', (req, res) => {
   const id = req.params.id
-  console.log(id)
+  console.log(`Route for getting pokemon by id with id: ${id}`)
 
   // Pokemon.deleteMany({}).then()
 
@@ -26,12 +26,26 @@ router.get('/:id', (req, res) => {
 
 })
 
+router.get('/:name(\\w+)', async (req, res) => {
+  const name = req.params.name
+  console.log(`Route for getting pokemon by name with name: ${name}`)
+
+  // Pokemon.deleteMany({}).then()
+
+  const pokemon = await getPokemonByName(name)
+  res.send(pokemon)
+
+})
+
 // get a pokemon from DB or call the API and save new entry
 const getPokemon = async (id) => {
   console.log("start getting pokemon with id " + id)
 
   try {
     const pokemon = await Pokemon.findOne({ id: id })
+    // .populate('evolves_to.pokemon')
+
+    // console.log(pokemon)
 
     if (pokemon != null) {
       console.log(`Pokemon #${id}: ${pokemon.name} found in DB!`)
@@ -111,9 +125,10 @@ const getPokemonByName = async (name) => {
 
   try {
     const pokemon = await Pokemon.findOne({ name: name })
+    // .populate('evolves_to.pokemon')
 
     if (pokemon != null) {
-      console.log(`Pokemon ${name}: ${pokemon.name} found in DB!`)
+      console.log(`Pokemon ${pokemon.name} found in DB!`)
       return pokemon
     } else {
       console.log(`Pokemon #${name} not found in DB, getting from pokeAPI...`)
@@ -273,13 +288,13 @@ const trimPokemonData = async (pokemonData, speciesData) => {
             and maybe also needed for evolves_from when second evolution or beyond to get previous evolution(s)*/
 
   // test for todo above
-  let evolves_to = await getEvolutions(speciesData.evolution_chain.url)
+  let evolution_chain = await getEvolutions(speciesData.evolution_chain.url)
 
   let names = trimNames(speciesData.names)
 
 
   const moves = await getMoves(rawMoves)
-  pokemon = { abilities, moves, held_items, names, stats, types, evolves_to, ...pokemon }
+  pokemon = { abilities, moves, held_items, names, stats, types, evolution_chain, ...pokemon }
 
   // return pokemon
 
@@ -409,26 +424,30 @@ const getEvolutions = async (url) => {
   }
 }
 
-const filterEvolutionChain = async (evolutionChain) => {
+const filterEvolutionChain = (evolutionChain) => {
   console.log("getting evolutions...")
-  const evolves_to = []
+  const baseEvolution = {
+    name: evolutionChain.species.name,
+    method: "base",
+    trigger: null,
+    evolves_to: []
+  }
   if (evolutionChain.evolves_to === null) {
-    return evolves_to
+    return newEvoChain
   } else {
 
     evolutionChain.evolves_to.forEach(evolution => {
       const evolutionElement = recursiveEvoChain(evolution)
-      evolves_to.push(evolutionElement ? evolutionElement : null)
+      baseEvolution.evolves_to.push(evolutionElement ? evolutionElement : null)
     })
   }
 
-  return evolves_to
+  return baseEvolution
 }
 
-
+// get all nested evolutions and append
 const recursiveEvoChain = (chainElement) => {
   console.log("getting new (sub-)evolution")
-  const evolves_to = []
 
   const evolution = {}
 
@@ -453,6 +472,7 @@ const recursiveEvoChain = (chainElement) => {
       break
   }
 
+  // if evolution also evolves, recursively get those as well
   if (chainElement.evolves_to !== null) {
     evolution.evolves_to = []
     chainElement.evolves_to.forEach(subChainElement => {

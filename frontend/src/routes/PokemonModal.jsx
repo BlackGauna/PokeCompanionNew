@@ -10,6 +10,7 @@ import '../styles/types.css'
 import dexStyle from '../styles/dexEntry.module.css'
 
 import styled from 'styled-components'
+import axios from '../api.jsx'
 
 
 // setup style for react-table with style-components
@@ -82,11 +83,14 @@ const DexEntryModal = (props) => {
   // loading mode, so that modal renders when finished loading data
   const [isLoading, setLoading] = useState(true)
 
+  const [evolutions, setEvolutions] = useState([])
+
   useEffect(() => {
     // check if props not empty
     if (!isEmpty(props.pokemonData)) {
       console.log("drawing modal")
       setPokemonData(props.pokemonData)
+      buildEvolutions(props.pokemonData.evolution_chain)
       setLoading(false)
     }
 
@@ -95,7 +99,7 @@ const DexEntryModal = (props) => {
 
   useEffect(() => {
     if (!isEmpty(pokemonData)) {
-      console.log("pokemonData")
+      console.log("pokemonData:")
       console.log(props.pokemonData)
     }
   }, [pokemonData])
@@ -170,6 +174,51 @@ const DexEntryModal = (props) => {
     })
 
     return types
+  }
+
+
+  const buildEvolutions = async (evolutionChain) => {
+    let evolutionHTML = <></>
+    try {
+      console.log("getting evolution chain " + evolutionChain.name)
+      const baseEvo = (await axios.get(`/api/pokemon/${evolutionChain.name}`)).data
+      console.log("baseEvo:")
+      console.log(baseEvo)
+      evolutionHTML = (<div>
+        <img style={{ width: "4rem" }} src={baseEvo.sprite} /> {encodeURI("-->")}
+
+        {await getEvolutionsRecursive(evolutionChain.evolves_to)}
+      </div>)
+    } catch (error) {
+      console.log(`Error getting base evolution: ${evolutionChain.name}`)
+    }
+
+
+    console.log("finished")
+    console.log(evolutionHTML)
+
+    setEvolutions(evolutionHTML)
+  }
+
+  const getEvolutionsRecursive = async (chain) => {
+    for (const evolution of chain) {
+      try {
+        console.log(`Trying to get info of evolution ${evolution.name}`)
+        const nextEvolution = (await axios.get(`/api/pokemon/${evolution.name}`)).data
+
+        const evolutionHTML = (
+          <>
+            <img style={{ width: "4rem" }} src={nextEvolution.sprite} />
+            {await getEvolutionsRecursive(evolution.evolves_to)}
+          </>
+        )
+        return evolutionHTML
+      } catch (error) {
+        console.log("Error when trying to get evolution")
+        console.error(error)
+        return null
+      }
+    }
   }
 
   // const reloadData = useCallback(() => {
@@ -298,7 +347,7 @@ const DexEntryModal = (props) => {
           {/* Evolutions */}
           <Container>
             <h4>Evolutions:</h4>
-
+            {evolutions}
           </Container>
           {/* Pokemon Moves */}
           <RTable className='gx-0'>
