@@ -41,8 +41,6 @@ td,th{
   padding-right:1px;
 }
 
-
-
 table {
 table-layout:fixed;
 width:100%;
@@ -196,32 +194,33 @@ const DexEntryModal = (props) => {
             <tbody>
               {/* general info of pokemon at the top */}
               <tr role={"row"} className={dexStyle.generalInfo}>
-                <td variant="auto" role={'cell'} className={dexStyle.icon}>
+                <td variant="auto" role={'cell'} className={`${dexStyle.icon} ${dexStyle.darkBackground}`}>
                   {/* pokemon image */}
                   <img style={{ width: "100%" }} src={"/images/pokemon/" + pokemonData.id + ".png"} />
                 </td>
-                <td>
+                <td className={dexStyle.darkBackground}>
                   <RTable style={{ marginBottom: "0rem" }}>
                     <tbody>
                       <tr>
-                        <td>
+                        <td className={dexStyle.darkBackground}>
                           {/* pokemon number and name */}
                           <div className={dexStyle.info}>
                             #{pokemonData.id} - {pokemonData.names.en}{buildPokemonTypesElement(pokemonData.types)}
-                          </div></td>
+                          </div>
+                        </td>
                       </tr>
 
                       <tr>
-                        <td style={{ borderBottomWidth: "0px" }}>{/* remove ugly border */}
+                        <td className={dexStyle.darkBackground} style={{ borderBottomWidth: "0px" }}>{/* remove ugly border */}
                           {/* pokemon stats */}
                           <div className={dexStyle.info}>
                             Stats:
                           </div>
                           <RTable className={dexStyle.statsTable + " borderless"}>
                             <tbody>
-                              <tr>
-                                <td className={dexStyle.statName}><div>HP</div></td>
-                                <td>
+                              <tr >
+                                <td className={`${dexStyle.statName} ${dexStyle.darkBackground}`}><div>HP</div></td>
+                                <td className={dexStyle.darkBackground}>
                                   <div style={{ float: 'left', width: "100%" }}>
                                     <div className={dexStyle.statsBar} style={{ backgroundColor: "red", width: calcStatBarLength(pokemonData.stats[0].base_stat) + "%" }}></div>
                                     <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[0].base_stat}</div>
@@ -229,8 +228,8 @@ const DexEntryModal = (props) => {
                                 </td>
                               </tr>
                               <tr>
-                                <td className={dexStyle.statName}><div>Attack</div></td>
-                                <td>
+                                <td className={`${dexStyle.statName} ${dexStyle.darkBackground}`}><div>Attack</div></td>
+                                <td className={dexStyle.darkBackground}>
                                   <div style={{ float: 'left', width: "100%" }}>
                                     <div className={dexStyle.statsBar} style={{ backgroundColor: "orange", width: calcStatBarLength(pokemonData.stats[1].base_stat) + "%" }}></div>
                                     <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[1].base_stat}</div>
@@ -239,8 +238,8 @@ const DexEntryModal = (props) => {
                                 </td>
                               </tr>
                               <tr>
-                                <td className={dexStyle.statName}><div>Defense</div></td>
-                                <td>
+                                <td className={`${dexStyle.statName} ${dexStyle.darkBackground}`}><div>Defense</div></td>
+                                <td className={dexStyle.darkBackground}>
                                   <div style={{ float: 'left', width: "100%" }}>
                                     <div className={dexStyle.statsBar} style={{ backgroundColor: "gold", width: calcStatBarLength(pokemonData.stats[2].base_stat) + "%" }}></div>
                                     <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[2].base_stat}</div>
@@ -249,8 +248,8 @@ const DexEntryModal = (props) => {
                                 </td>
                               </tr>
                               <tr>
-                                <td className={dexStyle.statName}><div>Sp. Atk.</div></td>
-                                <td>
+                                <td className={`${dexStyle.statName} ${dexStyle.darkBackground}`}><div>Sp. Atk.</div></td>
+                                <td className={dexStyle.darkBackground}>
                                   <div style={{ float: 'left', width: "100%" }}>
                                     <div className={dexStyle.statsBar} style={{ backgroundColor: "skyblue", width: calcStatBarLength(pokemonData.stats[3].base_stat) + "%" }}></div>
                                     <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[3].base_stat}</div>
@@ -259,8 +258,8 @@ const DexEntryModal = (props) => {
                                 </td>
                               </tr>
                               <tr>
-                                <td className={dexStyle.statName}><div>Sp. Def.</div></td>
-                                <td>
+                                <td className={`${dexStyle.statName} ${dexStyle.darkBackground}`}><div>Sp. Def.</div></td>
+                                <td className={dexStyle.darkBackground}>
                                   <div style={{ float: 'left', width: "100%" }}>
                                     <div className={dexStyle.statsBar} style={{ backgroundColor: "darkviolet", width: calcStatBarLength(pokemonData.stats[4].base_stat) + "%" }}></div>
                                     <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[4].base_stat}</div>
@@ -269,8 +268,8 @@ const DexEntryModal = (props) => {
                                 </td>
                               </tr>
                               <tr>
-                                <td className={dexStyle.statName}><div>Speed</div></td>
-                                <td>
+                                <td className={`${dexStyle.statName} ${dexStyle.darkBackground}`}><div>Speed</div></td>
+                                <td className={dexStyle.darkBackground}>
                                   <div style={{ float: 'left', width: "100%" }}>
                                     <div className={dexStyle.statsBar} style={{ backgroundColor: "green", width: calcStatBarLength(pokemonData.stats[5].base_stat) + "%" }}></div>
                                     <div style={{ whiteSpace: "pre" }}>  {pokemonData.stats[5].base_stat}</div>
@@ -301,7 +300,7 @@ const DexEntryModal = (props) => {
             <tbody className='gx-0'>
               <tr className='gx-0'>
                 {/* pokemon's moves divided in level up and machine tables */}
-                <td style={{ verticalAlign: "top", width: "50%" }}>
+                <td className={dexStyle.darkBackground} style={{ verticalAlign: "top", width: "50%" }}>
                   {/* gx-0 to  remove padding from added tbody and tr to table structure  */}
                   <Container className={'gx-0 ' + dexStyle.attackTableContainer}>
                     <h6>Attacks by level-up:</h6>
@@ -310,7 +309,7 @@ const DexEntryModal = (props) => {
                     </Style>
                   </Container>
                 </td>
-                <td style={{ verticalAlign: "top", width: "50%" }}>
+                <td className={dexStyle.darkBackground} style={{ verticalAlign: "top", width: "50%" }}>
                   <Container className={'gx-0 ' + dexStyle.attackTableContainer}>
                     <h6>Attacks by HM/TM:</h6>
                     <Style>

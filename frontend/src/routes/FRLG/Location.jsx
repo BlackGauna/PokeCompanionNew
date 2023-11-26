@@ -11,6 +11,8 @@ import '../../styles/location.css'
 import '../../styles/svg.css'
 import DexEntryModal from '../PokemonModal.jsx'
 
+import encounterStyle from '../../styles/encounterTable.module.css'
+
 const folderPath = '/images/FRLG/'
 let location
 
@@ -33,7 +35,7 @@ const TableStyle = styled.div`
 
   .pokemonCol {
     min-width:160px;
-    max-width:200px;
+    max-width:250px;
     display:flex;
   }
   `
@@ -87,7 +89,7 @@ function FRLGLocation() {
 
   // main entry point, get location data
   useEffect(() => {
-
+    console.log(encounterStyle.encounterCell)
     // setup AbortController to cancel an axios call, e.g. when called twice by react strict mode
     // but react strict mode is still at least beginning call
     const abortController = new AbortController()
@@ -314,10 +316,10 @@ function FRLGLocation() {
         <RTable borderless style={{ tableLayout: "fixed", marginBottom: "0rem" }}>
           <tbody>
             <tr style={{ verticalAlign: "top" }}>
-              <td style={{ width: "50%" }} >
+              <td className={encounterStyle.encounterCell} style={{ width: "50%" }} >
                 {location}
               </td>
-              <td style={{ width: "50%" }}>
+              <td className={encounterStyle.encounterCell} style={{ width: "50%" }}>
                 <TableStyle>
                   <Table columns={columns} data={tableData} initialState={initialState} />
                 </TableStyle>
