@@ -1,16 +1,32 @@
 import { Router } from 'express'
 const router = Router()
 
-import Pokedex from 'pokedex-promise-v2'
+import PokeApi from 'pokedex-promise-v2'
 import { Pokemon } from '../models/Pokemon.js'
 
 const options = {
   cacheLimit: 1 * 1000,
-  timeout: 1 * 1000
+  timeout: 5 * 1000
 }
-var pokedex = new Pokedex(options)
+var Pokedex = new PokeApi(options)
 
 // IS only for FRLG pokemon (moves, etc. are filtered for FRLG)
+
+router.delete('/:id(\\d+)', async (req, res) => {
+  const id = req.params.id
+  console.log(`Deleting pokemon with id: ${id}`)
+
+  // Pokemon.deleteMany({}).then()
+
+  try {
+    const deletedPokemon = await Pokemon.deleteOne({ id: id })
+    res.send(`Deleted pokemon with id #${id}`)
+  } catch (error) {
+    console.log(`Could not delete pokemon with id #${id}`)
+    console.error(error)
+  }
+
+})
 
 // @route GET pokemon
 // @desc Get pokemon from DB or add to DB from pokeAPI
@@ -104,8 +120,8 @@ function getOnce(callback) {
 
 async function getNewPokemon(id) {
   try {
-    let searchPokemon = await pokedex.getPokemonByName(id)
-    let searchPokemonSpecies = await pokedex.getPokemonSpeciesByName(searchPokemon.name)
+    let searchPokemon = await Pokedex.getPokemonByName(id)
+    let searchPokemonSpecies = await Pokedex.getPokemonSpeciesByName(searchPokemon.name)
 
     let newPokemon = await trimPokemonData(searchPokemon, searchPokemonSpecies)
 
@@ -147,8 +163,8 @@ const getPokemonByName = async (name) => {
 const getNewPokemonByName = async (name) => {
   try {
     console.log(`start getting pokemon with name ${name} from pokeAPI`)
-    let searchPokemon = await pokedex.getPokemonByName(name)
-    let searchPokemonSpecies = await pokedex.getPokemonSpeciesByName(searchPokemon.name)
+    let searchPokemon = await Pokedex.getPokemonByName(name)
+    let searchPokemonSpecies = await Pokedex.getPokemonSpeciesByName(searchPokemon.name)
 
     let newPokemon = await trimPokemonData(searchPokemon, searchPokemonSpecies)
 
@@ -171,8 +187,8 @@ const timer = ms => new Promise(res => setTimeout(res, ms))
 async function loadAll(res) { // We need to wrap the loop into an async function for this to work
   for (let index = 1; index < 151; index++) {
 
-    pokedex.getPokemonByName(index).then((pokemonData) => {
-      pokedex.getPokemonSpeciesByName(pokemonData.name).then((speciesData) => {
+    Pokedex.getPokemonByName(index).then((pokemonData) => {
+      Pokedex.getPokemonSpeciesByName(pokemonData.name).then((speciesData) => {
         trimPokemonData(pokemonData, speciesData)
       })
     })
@@ -229,24 +245,24 @@ const trimPokemonData = async (pokemonData, speciesData) => {
   delete pokemonData.held_items
 
   // trim moves
-  let rawMoves = []
-  pokemonData.moves.forEach(moveElement => {
-    let move = {}
-    move.name = moveElement.move.name
-    move.version_group_details = []
+  // let rawMoves = []
+  // pokemonData.moves.forEach(moveElement => {
+  //   let move = {}
+  //   move.name = moveElement.move.name
+  //   move.version_group_details = []
 
-    moveElement.version_group_details.forEach(groupElement => {
-      let group_detail = {}
-      group_detail.level_learned_at = groupElement.level_learned_at
-      group_detail.move_learn_method = groupElement.move_learn_method.name
-      group_detail.version_group = groupElement.version_group.name
+  //   moveElement.version_group_details.forEach(groupElement => {
+  //     let group_detail = {}
+  //     group_detail.level_learned_at = groupElement.level_learned_at
+  //     group_detail.move_learn_method = groupElement.move_learn_method.name
+  //     group_detail.version_group = groupElement.version_group.name
 
-      move.version_group_details.push(group_detail)
-    })
-    rawMoves.push(move)
-  })
+  //     move.version_group_details.push(group_detail)
+  //   })
+  //   rawMoves.push(move)
+  // })
 
-  delete pokemonData.moves
+  // delete pokemonData.moves
 
   // trim stats
   // TODO: add names field from stat's API page (maybe unneeded if hardcoded in frontend, as not dynamic it seems)
@@ -292,28 +308,15 @@ const trimPokemonData = async (pokemonData, speciesData) => {
 
   let names = trimNames(speciesData.names)
 
-
-  const moves = await getMoves(rawMoves)
+  console.log(`get moves for ${pokemonData.name}`)
+  // console.log(pokemonData)
+  const moves = await newgetMoves(pokemonData.moves)
   pokemon = { abilities, moves, held_items, names, stats, types, evolution_chain, ...pokemon }
-
-  // return pokemon
+  // console.log(pokemon)
 
   return new Promise((resolve, reject) => {
     resolve(pokemon)
   })
-
-  // getMoves(rawMoves).then((moves) => {
-  //   pokemon = { abilities, moves, held_items, names, stats, types, ...pokemon }
-
-  //   // const pokemonDB = new Pokemon(pokemon)
-  //   // pokemonDB.save().then((data) => {
-  //   //   console.log(data);
-  //   //   // parentRes.send(data)
-  //   // })
-
-  //   console.log(pokemon);
-  //   return pokemon
-  // })
 
 }
 
@@ -326,6 +329,126 @@ const trimNames = (namesArray) => {
   return names
 }
 
+/*
+  Create new moves object, filtered by version-group
+
+  moves{
+    red-blue: [move]
+    ...
+    ruby-sapphire: [move]
+    ...
+  }
+*/
+const newgetMoves = async (movesArray) => {
+  // console.log(movesArray)
+  let moveByVersion = {}
+
+  for (const rawMove of movesArray) {
+
+    let moveName = rawMove.move.name
+    let asyncMoveCall
+    let moveInfo
+    try {
+
+      asyncMoveCall = Pokedex.getMoveByName(moveName) // get move info from pokeapi
+
+    } catch (error) {
+      console.log("Error getting move async")
+    }
+
+
+
+    const rawVersionGroup = rawMove.version_group_details
+    for (const group of rawVersionGroup) {
+      let move = {} // new move to be added to array/s
+      move.name = moveName
+
+      const groupId = parseInt(group.version_group.url.match(new RegExp("/(\\d+)"))[1])
+      const groupName = group.version_group.name
+
+      move.level_learned_at = group.level_learned_at
+      if (move.name === "water-gun" && groupName === "firered-leafgreen") {
+        console.log(`level ${move.level_learned_at}`)
+      }
+      move.moveLearnMethod = group.move_learn_method.name
+
+      try {
+        moveInfo = moveInfo || (await asyncMoveCall) // wait for api call to finish
+        // write additional info to move object
+        move.names = trimNames(moveInfo.names)
+        move.accuracy = moveInfo.accuracy
+        move.power = moveInfo.power
+        move.type = moveInfo.type.name
+
+        // check if there are past values
+        for (const pastValue of moveInfo.past_values) {
+          const targetGroupId = parseInt(pastValue.version_group.url.match(new RegExp("/(\\d+)"))[1])
+          if (groupId < targetGroupId) {
+            move.accuracy = pastValue.accuracy ?? move.accuracy
+            move.power = pastValue.power ?? move.power
+            move.type = pastValue.type?.name ?? move.type
+            break // jump out of loop because the first found value should be the oldest one
+          }
+        }
+      } catch (error) {
+        console.log(`Error getting move info for ${move.name}`)
+        console.error(error)
+      }
+
+      // if field not created yet, create empty array for version
+      if (moveByVersion[groupName] === undefined) {
+        moveByVersion[groupName] = {}
+        moveByVersion[groupName].level_up = []
+        moveByVersion[groupName].machine = []
+        moveByVersion[groupName].other = []
+
+      }
+
+      // add move to array
+      switch (move.moveLearnMethod) {
+        case "level-up":
+          moveByVersion[groupName].level_up.push(move)
+          break
+        case "machine":
+          moveByVersion[groupName].machine.push(move)
+          break
+        default:
+          moveByVersion[groupName].other.push(move)
+          break
+      }
+
+      // moveByVersion[groupName].push(move)
+    }
+  }
+
+  for (const versionMoves in moveByVersion) {
+    if (Object.hasOwnProperty.call(moveByVersion, versionMoves)) {
+      let movesArray = moveByVersion[versionMoves].level_up
+      console.log(movesArray)
+      // movesArray = Array.from(movesArray)
+      movesArray = sortMovesByLevel(movesArray)
+    }
+  }
+
+  return moveByVersion
+}
+
+const sortMovesByLevel = (movesArray) => {
+  movesArray.sort((a, b) => {
+    if (a.level_learned_at < b.level_learned_at) {
+      return -1
+    } else if (a.level_learned_at > b.level_learned_at) {
+      return 1
+    }
+
+    return a.name.localeCompare(b.name)
+  })
+
+  return movesArray
+}
+
+/* TODO: update function to get all moves in separate fields for editions. 
+        So that the pokedex is relatively general. But what about evolutions and types?*/
 // get moves for FRLG in trimmed array
 const getMoves = async (movesArray) => {
   let moves = {}
@@ -337,7 +460,6 @@ const getMoves = async (movesArray) => {
 
   movesArray.forEach(movesElement => {
 
-
     movesElement.version_group_details.forEach(groupElement => {
       if (groupElement.version_group == 'firered-leafgreen') {
         let move = {}
@@ -348,7 +470,7 @@ const getMoves = async (movesArray) => {
         // move.move_learn_method = groupElement.move_learn_method
 
         // promises to get move info from api asynchronously
-        promises.push(pokedex.getMoveByName(move.name).then((res) => {
+        promises.push(Pokedex.getMoveByName(move.name).then((res) => {
           move.power = res.power
           move.accuracy = res.accuracy
           move.type = res.type.name
@@ -415,7 +537,7 @@ const getMovesRaw = (movesArray) => {
 // TODO: rethink structure of array/object, and filter to evolves_from and evolves_to when appropriate
 const getEvolutions = async (url) => {
   try {
-    const evolutions = await pokedex.getResource(url)
+    const evolutions = await Pokedex.getResource(url)
     return filterEvolutionChain(evolutions.chain)
 
   } catch (error) {

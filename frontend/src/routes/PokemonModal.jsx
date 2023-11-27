@@ -305,7 +305,7 @@ const DexEntryModal = (props) => {
                   <Container className={'gx-0 ' + dexStyle.attackTableContainer}>
                     <h6>Attacks by level-up:</h6>
                     <Style>
-                      <Table columns={levelUpTable} data={pokemonData.moves.level_up} />
+                      <Table columns={levelUpTable} data={pokemonData.moves["firered-leafgreen"]?.level_up ?? []} />
                     </Style>
                   </Container>
                 </td>
@@ -313,7 +313,7 @@ const DexEntryModal = (props) => {
                   <Container className={'gx-0 ' + dexStyle.attackTableContainer}>
                     <h6>Attacks by HM/TM:</h6>
                     <Style>
-                      <Table columns={machineTable} data={pokemonData.moves.machine} />
+                      <Table columns={machineTable} data={pokemonData.moves["firered-leafgreen"]?.machine ?? []} />
                     </Style>
                   </Container>
 

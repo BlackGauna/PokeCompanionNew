@@ -36,11 +36,7 @@ const PokemonSchema = new Schema({
       name: String,
     }]
   }],
-  moves: {
-    level_up: {},
-    machine: {},
-    other: {},
-  },
+  moves: SchemaTypes.Mixed,
   stats: [{
     _id: false,
     name: String,
@@ -66,14 +62,5 @@ const PokemonSchema = new Schema({
   //   toObject: { virtuals: true }
   // }
 )
-
-
-// PokemonSchema.virtual('evolves_to.pokemon', {
-//   ref: 'Pokemon', // reference to the same model
-//   localField: 'evolves_to.name', // field in the current model
-//   foreignField: 'name', // field in the referenced model
-//   justOne: false, // each Pokemon can evolve into multiple other Pokemon
-// })
-
 
 export const Pokemon = model('Pokemon', PokemonSchema, 'Pokemon')
