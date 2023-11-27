@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Container } from 'react-bootstrap'
 import axios from '../api'
+import { isEmpty } from '../utils/Object'
 
 function EvolutionChain({ pokemonData, showNewPokemon }) {
 
@@ -11,27 +12,28 @@ function EvolutionChain({ pokemonData, showNewPokemon }) {
 
   const hasBeenCalled = useRef(false)
   useEffect(() => {
-    console.log(`hasbeencalled: ${hasBeenCalled.current}`)
-    if (!hasBeenCalled.current) {
+
+    if (!hasBeenCalled.current && !isEmpty(pokemonData)) {
+      hasBeenCalled.current = true
+      console.log("evolution chain")
+      console.log(pokemonData.name)
       setEvolutionChain(pokemonData.evolution_chain)
       buildEvolutions(pokemonData.evolution_chain)
-
-      console.log(pokemonData)
     }
 
-    hasBeenCalled.current = true
 
 
     return () => {
       setEvolutionChain({})
       setEvolutionHTML(<></>)
       setPokemonInfoMap(new Map())
-      console.log("evo chain removed")
+      // console.log("evo chain removed")
     }
   }, [])
 
   const buildEvolutions = async (evolutionChain) => {
     console.log("buildEvolutions has fired!")
+    console.log(evolutionChain)
     let evolutionHTML = <></>
     try {
       // console.log("getting evolution chain " + evolutionChain.name)

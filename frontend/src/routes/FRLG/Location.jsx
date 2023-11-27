@@ -54,14 +54,7 @@ function FRLGLocation() {
 
   // state variable and function to toggle modal
   const [showModal, setShowModal] = useState(false)
-  const toggleShowModal = (data) => {
-    setShowModal(!showModal)
-    setPokemonModal(data ? data : {})
-    console.log("toggle")
-  }
-  useEffect(() => {
-    console.log("showmodal: " + showModal)
-  }, [showModal])
+
 
   useEffect(() => {
 
@@ -89,7 +82,7 @@ function FRLGLocation() {
 
   // main entry point, get location data
   useEffect(() => {
-    console.log(encounterStyle.encounterCell)
+
     // setup AbortController to cancel an axios call, e.g. when called twice by react strict mode
     // but react strict mode is still at least beginning call
     const abortController = new AbortController()
@@ -186,6 +179,14 @@ function FRLGLocation() {
 
   }
 
+  const toggleModal = () => {
+    setShowModal(!showModal)
+  }
+
+  const showPokemon = (pokemon) => {
+    setPokemonModal(pokemon)
+    toggleModal()
+  }
 
   // custom button which handles setting the state, otherwise no access to states
   const PokemonButton = ({ data }) => {
@@ -197,9 +198,9 @@ function FRLGLocation() {
       // } else {
       //   setPokemonModal(data)
 
-      toggleShowModal(data)
+      showPokemon(data)
 
-    }, [pokemonModal, data, setPokemonModal, toggleShowModal])
+    }, [pokemonModal, data])
 
     return (
       <Button className='linkButton' onClick={onClick}>{data.names.en}</Button>
@@ -342,7 +343,7 @@ function FRLGLocation() {
         </Row> */}
 
 
-        <DexEntryModal pokemonData={pokemonModal} show={showModal} toggleShow={toggleShowModal} />
+        <DexEntryModal pokemon={pokemonModal} show={showModal} toggleShow={() => { showPokemon({}) }} />
       </Container>
 
     )

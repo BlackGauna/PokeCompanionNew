@@ -10,6 +10,7 @@ import FRLGLocation from './routes/FRLG/Location.jsx'
 import EvolutionChain from './components/EvolutionChain.jsx'
 
 import './index.css'
+import Pokedex from './routes/Pokedex.jsx'
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,9 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/", element: <PokeList />
+      },
+      {
+        path: "/pokedex", element: <Pokedex />
       },
       {
         path: "/FRLG/map", element: <FRLGMap />

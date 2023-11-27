@@ -71,7 +71,7 @@ tr {
 
 `
 
-const DexEntryModal = (props) => {
+const DexEntryModal = ({ pokemon, show, toggleShow }) => {
 
   const [pokemonData, setPokemonData] = useState({})
 
@@ -82,9 +82,9 @@ const DexEntryModal = (props) => {
 
   useEffect(() => {
     // check if props not empty
-    if (!isEmpty(props.pokemonData)) {
+    if (pokemon !== null & !isEmpty(pokemon)) {
       console.log("drawing modal")
-      setPokemonData(props.pokemonData)
+      setPokemonData(pokemon)
       // buildEvolutions(props.pokemonData.evolution_chain)
       setLoading(false)
     }
@@ -93,14 +93,14 @@ const DexEntryModal = (props) => {
       setPokemonData({})
       setLoading(true)
     }
-  }, [props.pokemonData])
+  }, [pokemon])
 
   useEffect(() => {
     if (!isEmpty(pokemonData)) {
       console.log("pokemonData:")
-      console.log(props.pokemonData)
+      console.log(pokemon)
     }
-  }, [pokemonData])
+  }, [pokemon])
 
   // columns for level-up moves in modal
   const levelUpTable = React.useMemo(() => [
@@ -183,7 +183,7 @@ const DexEntryModal = (props) => {
     return <div></div>
   }
   return (
-    <Modal show={props.show} onHide={props.toggleShow}>
+    <Modal show={show} onHide={() => { toggleShow({}) }}>
       <Modal.Header className={dexStyle.modalHeader} closeButton>
         <Modal.Title>#{pokemonData.id} - {pokemonData.names.en} </Modal.Title>
       </Modal.Header>
@@ -326,7 +326,7 @@ const DexEntryModal = (props) => {
 
       </Modal.Body >
       <Modal.Footer className={dexStyle.modalHeader}>
-        <Button variant='secondary' onClick={props.toggleShow}>Close</Button>
+        <Button variant='secondary' onClick={() => { toggleShow({}) }}>Close</Button>
       </Modal.Footer>
     </Modal >
   )

@@ -6,7 +6,7 @@ import { Pokemon } from '../models/Pokemon.js'
 
 const options = {
   cacheLimit: 1 * 1000,
-  timeout: 5 * 1000
+  timeout: 2 * 1000
 }
 var Pokedex = new PokeApi(options)
 
@@ -32,7 +32,7 @@ router.delete('/:id(\\d+)', async (req, res) => {
 // @desc Get pokemon from DB or add to DB from pokeAPI
 router.get('/:id(\\d+)', (req, res) => {
   const id = req.params.id
-  console.log(`Route for getting pokemon by id with id: ${id}`)
+  // console.log(`Route for getting pokemon by id with id: ${id}`)
 
   // Pokemon.deleteMany({}).then()
 
@@ -42,9 +42,34 @@ router.get('/:id(\\d+)', (req, res) => {
 
 })
 
+router.get('/all', async (req, res) => {
+  // Pokemon.deleteMany({}).then()
+  const { page = 1, pageSize = 20 } = req.query
+
+  try {
+    // console.log("#### Getting all pokemon ####")
+    // await loadAll(res)
+    console.log("#### getting all pokemon ####")
+    const allPokemon = await Pokemon.find({})
+      .sort("id")
+      .limit(pageSize)
+      .skip((1 - page) * pageSize)
+
+    const totalEntries = await Pokemon.countDocuments({})
+
+    console.log("#### got all pokemon ####")
+    res.json({ allPokemon, totalEntries, totalPages: Math.ceil(totalEntries / pageSize) })
+
+  } catch (error) {
+    console.log("Error getting all pokemon")
+    console.error(error)
+  }
+
+})
+
 router.get('/:name(\\w+)', async (req, res) => {
   const name = req.params.name
-  console.log(`Route for getting pokemon by name with name: ${name}`)
+  // console.log(`Route for getting pokemon by name with name: ${name}`)
 
   // Pokemon.deleteMany({}).then()
 
@@ -55,8 +80,8 @@ router.get('/:name(\\w+)', async (req, res) => {
 
 // get a pokemon from DB or call the API and save new entry
 const getPokemon = async (id) => {
-  console.log("start getting pokemon with id " + id)
-
+  console.log(`#### Start getting pokemon with id ${id}...`)
+  console.group()
   try {
     const pokemon = await Pokemon.findOne({ id: id })
     // .populate('evolves_to.pokemon')
@@ -65,13 +90,14 @@ const getPokemon = async (id) => {
 
     if (pokemon != null) {
       console.log(`Pokemon #${id}: ${pokemon.name} found in DB!`)
+      console.groupEnd()
       return pokemon
     } else {
       console.log(`id #${id} not found in DB, getting from pokeAPI...`)
 
 
       const newPokemon = getOnce(getNewPokemon)
-
+      console.groupEnd()
       return await newPokemon(id)
 
     }
@@ -132,25 +158,29 @@ async function getNewPokemon(id) {
     return newPokemonDB
 
   } catch (error) {
+    console.log("#### Error getting new Pokemon ####")
     console.error(error)
+    console.log("##### Error getting new Pokemon ####")
   }
 }
 
 const getPokemonByName = async (name) => {
-  console.log("start getting pokemon with name " + name)
-
+  console.log(`#### Start getting pokemon with name ${name}...`)
+  console.group()
   try {
     const pokemon = await Pokemon.findOne({ name: name })
     // .populate('evolves_to.pokemon')
 
     if (pokemon != null) {
       console.log(`Pokemon ${pokemon.name} found in DB!`)
+      console.groupEnd()
+      console.log()
       return pokemon
     } else {
       console.log(`Pokemon #${name} not found in DB, getting from pokeAPI...`)
 
       const newPokemon = getOnce(getNewPokemonByName)
-
+      console.groupEnd()
       return await newPokemon(name)
 
     }
@@ -158,6 +188,7 @@ const getPokemonByName = async (name) => {
   } catch (error) {
     console.error(error)
   }
+
 }
 
 const getNewPokemonByName = async (name) => {
@@ -175,8 +206,9 @@ const getNewPokemonByName = async (name) => {
     return newPokemonDB
 
   } catch (error) {
-    console.log(`Pokemon ${name} not found`)
+    console.log(`##### Pokemon "${name}" not found #####`)
     console.error(error)
+    console.log(`##### Pokemon "${name}" not found #####`)
   }
 }
 
@@ -185,23 +217,13 @@ const getNewPokemonByName = async (name) => {
 const timer = ms => new Promise(res => setTimeout(res, ms))
 
 async function loadAll(res) { // We need to wrap the loop into an async function for this to work
-  for (let index = 1; index < 151; index++) {
+  for (let index = 1; index < 386; index++) {
 
-    Pokedex.getPokemonByName(index).then((pokemonData) => {
-      Pokedex.getPokemonSpeciesByName(pokemonData.name).then((speciesData) => {
-        trimPokemonData(pokemonData, speciesData)
-      })
-    })
+    getPokemon(index)
     await timer(3000)
   }
+
 }
-
-router.post('/all', (req, res) => {
-  // Pokemon.deleteMany({}).then()
-
-  loadAll(res)
-
-})
 
 const trimPokemonData = async (pokemonData, speciesData) => {
   // console.log(pokemonData);
@@ -424,8 +446,7 @@ const newgetMoves = async (movesArray) => {
   for (const versionMoves in moveByVersion) {
     if (Object.hasOwnProperty.call(moveByVersion, versionMoves)) {
       let movesArray = moveByVersion[versionMoves].level_up
-      console.log(movesArray)
-      // movesArray = Array.from(movesArray)
+
       movesArray = sortMovesByLevel(movesArray)
     }
   }
@@ -547,13 +568,15 @@ const getEvolutions = async (url) => {
 }
 
 const filterEvolutionChain = (evolutionChain) => {
-  console.log("getting evolutions...")
   const baseEvolution = {
     name: evolutionChain.species.name,
     method: "base",
     trigger: null,
     evolves_to: []
   }
+
+  console.log(`getting evolutions for ${baseEvolution.name}`)
+
   if (evolutionChain.evolves_to === null) {
     return newEvoChain
   } else {
@@ -569,7 +592,8 @@ const filterEvolutionChain = (evolutionChain) => {
 
 // get all nested evolutions and append
 const recursiveEvoChain = (chainElement) => {
-  console.log("getting new (sub-)evolution")
+  console.group()
+  // console.log("getting new (sub-)evolution")
 
   const evolution = {}
 
@@ -602,7 +626,7 @@ const recursiveEvoChain = (chainElement) => {
       evolution.evolves_to.push(sub_evolves_to ? sub_evolves_to : null)
     })
   }
-
+  console.groupEnd()
   return evolution
 }
 
